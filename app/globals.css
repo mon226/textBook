@@ -75,6 +75,11 @@ body {
   color: var(--foreground);
 }
 
+/* Main content wrapper for PC centering */
+main {
+  background-color: var(--background);
+}
+
 /* Container for PC layout */
 .container-wrapper {
   max-width: 960px;
@@ -263,7 +268,11 @@ p {
   border-radius: clamp(1rem, 2vw, 1.5rem);
   padding: clamp(2rem, 5vw, 3rem);
   box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.1);
-  margin-bottom: clamp(3rem, 8vw, 5rem);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 0;
 }
 
 /* Footer */

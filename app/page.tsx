@@ -113,31 +113,32 @@ export default function Home() {
       </section>
 
       {/* Subjects Section */}
-      <section ref={subjectsRef} className="min-h-screen py-[5vw]">
-        <div className="container-wrapper">
-          <h2 className="text-center font-bold text-primary mb-[5vw]">科目を選択</h2>
-          
-          {subjects.map((subject, index) => (
-            <div 
-              key={subject.href}
-              className={`subject-card ${isTablet ? subject.animationTablet : subject.animationMobile}`}
-              style={{ 
-                animationDelay: `${index * 0.2}s`
-              }}
-            >
-              <div className={`${subject.color} p-[3vw] rounded-[1vw] mb-[2vw]`}>
-                <h3 className="font-bold text-secondary mb-[1vw]">{subject.name}</h3>
-              </div>
-              <p className="text-primary mb-[2vw]">{subject.description}</p>
-              <Link 
-                href={subject.href}
-                className="btn-primary inline-block"
+      <section ref={subjectsRef} className="bg-white">
+        {subjects.map((subject, index) => (
+          <div className="min-h-screen flex items-center justify-center" key={subject.href}>
+            <div className="container-wrapper w-full">
+              <div 
+                className={`subject-card ${isTablet ? subject.animationTablet : subject.animationMobile}`}
+                style={{ 
+                  animationDelay: `${index * 0.2}s`
+                }}
               >
-                {subject.name}を学習する
-              </Link>
+                <div className="text-center">
+                  <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
+                    <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
+                  </div>
+                  <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
+                  <Link 
+                    href={subject.href}
+                    className="btn-primary inline-block"
+                  >
+                    {subject.name}を学習する
+                  </Link>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </section>
 
       {/* Footer */}
