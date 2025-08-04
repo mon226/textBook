@@ -312,7 +312,6 @@ p {
 
 /* Footer */
 footer {
-  background-color: var(--gray);
   color: var(--text-2);
   padding: clamp(2rem, 5vw, 3rem) 0;
 }

@@ -144,11 +144,11 @@ export default function Home() {
                   <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     href={subject.href}
-                    className={`inline-flex items-center justify-between ${subject.color} px-[6vw] py-[1.5vw] rounded-[2vw] text-secondary font-medium transition-all duration-300 hover:opacity-80`}
+                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[1.5vw] rounded-[2vw] text-secondary font-medium transition-all duration-300 hover:opacity-80 relative`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                   >
                     <span>view more!</span>
-                    <span className="ml-[2vw]">→</span>
+                    <span className="absolute right-[2vw]">→</span>
                   </Link>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function Home() {
       </div>
 
       {/* Footer - Normal position */}
-      <footer className="relative min-h-screen flex flex-col justify-center" style={{ backgroundColor: 'var(--gray)', zIndex: 50 }}>
+      <footer className="relative min-h-screen flex flex-col justify-center bg-gradient-main" style={{ zIndex: 50 }}>
         <div className="container-wrapper py-[5vw]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
             <div>
