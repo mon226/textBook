@@ -266,7 +266,7 @@ p {
 
 /* Subject card */
 .subject-card {
-  border-radius: clamp(1rem, 2vw, 1.5rem);
+  border-radius: clamp(1.5rem, 3vw, 2.5rem);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   padding: clamp(2rem, 5vw, 3rem);
@@ -281,8 +281,6 @@ p {
 
 .subject-card-english {
   background-color: var(--english-sub);
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
 }
 
 .subject-card-math {

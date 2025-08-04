@@ -70,14 +70,14 @@ export default function Home() {
     if (typeof window === 'undefined') return 'translateY(100%)';
     
     const cardStart = window.innerHeight + (index * 110 * window.innerHeight / 100);
-    const animationStart = cardStart - (30 * window.innerHeight / 100); // Changed from 20vh to 30vh for slower animation
+    const animationStart = cardStart - (50 * window.innerHeight / 100); // Changed to 50vh for much slower animation
     
     if (scrollY < animationStart) {
       // Card is below viewport
       return 'translateY(100%)';
     } else if (scrollY >= animationStart && scrollY < cardStart) {
       // Card is animating in
-      const progress = (scrollY - animationStart) / (30 * window.innerHeight / 100);
+      const progress = (scrollY - animationStart) / (50 * window.innerHeight / 100);
       // Ease-out curve for smoother animation
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       return `translateY(${100 - (easedProgress * 100)}%)`;
