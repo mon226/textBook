@@ -29,16 +29,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-main">
-      <div className="card rounded-lg p-12 max-w-lg text-center">
-        <h1 className="text-3xl font-bold text-primary mb-4">Welcome to My Site</h1>
-        <p className="text-primary mb-8">今日の日付: <span>{date}</span></p>
-        <button 
-          onClick={handleClick}
-          className="btn-primary px-8 py-3 rounded-md text-lg font-medium"
-        >
-          クリックしてみて
-        </button>
-        <p className="mt-8 text-xl text-accent">{message}</p>
+      <div className="container-wrapper">
+        <div className="card mx-auto text-center">
+          <h1 className="font-bold text-primary mb-[2vw]">Welcome to My Site</h1>
+          <p className="text-primary mb-[3vw]">今日の日付: <span>{date}</span></p>
+          <button 
+            onClick={handleClick}
+            className="btn-primary font-medium"
+          >
+            クリックしてみて
+          </button>
+          <p className="mt-[3vw] text-accent" style={{ fontSize: 'clamp(1.125rem, 3vw, 1.25rem)' }}>{message}</p>
+        </div>
       </div>
     </div>
   );
