@@ -1,15 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-// Register GSAP plugin
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
   const subjectsRef = useRef<HTMLDivElement>(null);
 
   const subjects = [
@@ -51,109 +46,107 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Clean up previous ScrollTriggers
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-
-    const cards = gsap.utils.toArray<HTMLElement>('.subject-card-container');
+    let animationId: number;
     
-    cards.forEach((card, index) => {
-      const isLast = index === cards.length - 1;
-      
-      ScrollTrigger.create({
-        trigger: card,
-        start: 'top top',
-        end: isLast ? 'bottom top' : '+=110vh',
-        pin: true,
-        pinSpacing: false,
+    const handleScroll = () => {
+      animationId = requestAnimationFrame(() => {
+        setScrollY(window.scrollY);
       });
+    };
 
-      if (!isLast) {
-        gsap.set(cards[index + 1], {
-          yPercent: 100
-        });
-
-        ScrollTrigger.create({
-          trigger: card,
-          start: 'top top+=80vh',
-          end: 'top top+=100vh',
-          onUpdate: (self) => {
-            gsap.set(cards[index + 1], {
-              yPercent: 100 - (self.progress * 100)
-            });
-          }
-        });
-      }
-    });
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      window.removeEventListener('scroll', handleScroll);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     };
   }, []);
 
   const scrollToSubjects = () => {
-    subjectsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
   };
 
-  return (
-    <div ref={containerRef} className="bg-gradient-main">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="container-wrapper">
-          <h1 className="font-bold text-secondary mb-[2vw]" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>
-            学習プラットフォーム
-          </h1>
-          <p className="text-secondary mb-[4vw]" style={{ fontSize: 'clamp(1.125rem, 3vw, 1.5rem)' }}>
-            あなたの学習を全力でサポート
-          </p>
-          <div className="flex flex-col sm:flex-row gap-[2vw] justify-center items-center">
-            <button 
-              onClick={scrollToSubjects}
-              className="btn-primary font-medium"
-            >
-              科目を選ぶ
-            </button>
-            <Link 
-              href="/pdf-viewer"
-              className="btn-secondary font-medium"
-            >
-              PDF閲覧
-            </Link>
-          </div>
-          <div className="mt-[8vw] animate-bounce">
-            <p className="text-secondary">↓</p>
-          </div>
-        </div>
-      </section>
+  // Calculate card positions based on scroll
+  const getCardTransform = (index: number) => {
+    const cardStart = window.innerHeight + (index * 110 * window.innerHeight / 100);
+    const animationStart = cardStart - (20 * window.innerHeight / 100);
+    
+    if (scrollY < animationStart) {
+      // Card is below viewport
+      return 'translateY(100%)';
+    } else if (scrollY >= animationStart && scrollY < cardStart) {
+      // Card is animating in
+      const progress = (scrollY - animationStart) / (20 * window.innerHeight / 100);
+      return `translateY(${100 - (progress * 100)}%)`;
+    } else {
+      // Card is fully visible
+      return 'translateY(0)';
+    }
+  };
 
-      {/* Subjects Section */}
-      <div ref={subjectsRef} className="relative" style={{ height: `${subjects.length * 110 + 20}vh` }}>
+  // Calculate total height needed
+  const totalHeight = window.innerHeight + (subjects.length * 110 * window.innerHeight / 100) + window.innerHeight;
+
+  return (
+    <>
+      {/* Spacer div to create scrollable area */}
+      <div style={{ height: `${totalHeight}px` }} className="bg-gradient-main">
+        {/* Hero Section */}
+        <section className="hero-section fixed top-0 left-0 w-full z-10">
+          <div className="container-wrapper">
+            <h1 className="font-bold text-secondary mb-[2vw]" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>
+              学習プラットフォーム
+            </h1>
+            <p className="text-secondary mb-[4vw]" style={{ fontSize: 'clamp(1.125rem, 3vw, 1.5rem)' }}>
+              あなたの学習を全力でサポート
+            </p>
+            <div className="flex flex-col sm:flex-row gap-[2vw] justify-center items-center">
+              <button 
+                onClick={scrollToSubjects}
+                className="btn-primary font-medium"
+              >
+                科目を選ぶ
+              </button>
+              <Link 
+                href="/pdf-viewer"
+                className="btn-secondary font-medium"
+              >
+                PDF閲覧
+              </Link>
+            </div>
+            <div className="mt-[8vw] animate-bounce">
+              <p className="text-secondary">↓</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Subjects Cards - Fixed position */}
         {subjects.map((subject, index) => (
           <div
             key={subject.href}
-            className="subject-card-container absolute top-0 left-0 w-full"
+            className="fixed top-0 left-0 w-full h-screen flex items-center justify-center"
             style={{ 
-              top: `${index * 110}vh`,
-              height: '100vh',
-              zIndex: subjects.length - index
+              transform: getCardTransform(index),
+              zIndex: 20 + index,
+              transition: 'none' // Disable CSS transitions for smoother animation
             }}
           >
-            <div className="h-full flex items-center justify-center">
-              <div className="container-wrapper w-full">
-                <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
-                  <div className="text-center">
-                    <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
-                      <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
-                    </div>
-                    <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
-                    <Link 
-                      href={subject.href}
-                      className="btn-primary inline-block"
-                    >
-                      {subject.name}を学習する
-                    </Link>
+            <div className="container-wrapper w-full">
+              <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
+                <div className="text-center">
+                  <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
+                    <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
                   </div>
+                  <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
+                  <Link 
+                    href={subject.href}
+                    className="btn-primary inline-block"
+                  >
+                    {subject.name}を学習する
+                  </Link>
                 </div>
               </div>
             </div>
@@ -161,8 +154,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Footer */}
-      <footer className="relative min-h-screen flex flex-col justify-center" style={{ backgroundColor: 'var(--gray)' }}>
+      {/* Footer - Normal position */}
+      <footer className="relative min-h-screen flex flex-col justify-center" style={{ backgroundColor: 'var(--gray)', zIndex: 50 }}>
         <div className="container-wrapper py-[5vw]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
             <div>
@@ -189,6 +182,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
