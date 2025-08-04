@@ -5,76 +5,63 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
   const subjectsRef = useRef<HTMLDivElement>(null);
-  const [isTablet, setIsTablet] = useState(false);
-
-  useEffect(() => {
-    const checkWidth = () => {
-      setIsTablet(window.innerWidth >= 768);
-    };
-    checkWidth();
-    window.addEventListener('resize', checkWidth);
-    return () => window.removeEventListener('resize', checkWidth);
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const subjects = [
     { 
       name: '英語', 
       href: '/english', 
       color: 'subject-english',
-      description: '英語の基礎から応用まで学習できます',
-      animationMobile: 'fade-in-up',
-      animationTablet: 'fade-in-up'
+      cardColor: 'subject-card-english',
+      description: '英語の基礎から応用まで学習できます'
     },
     { 
       name: '数学', 
       href: '/math', 
       color: 'subject-math',
-      description: '数学の問題演習と解説を提供します',
-      animationMobile: 'fade-in-up',
-      animationTablet: 'fade-in-left'
+      cardColor: 'subject-card-math',
+      description: '数学の問題演習と解説を提供します'
     },
     { 
       name: '国語', 
       href: '/japanese', 
       color: 'subject-japanese',
-      description: '読解力と表現力を養います',
-      animationMobile: 'fade-in-up',
-      animationTablet: 'fade-in-right'
+      cardColor: 'subject-card-japanese',
+      description: '読解力と表現力を養います'
     },
     { 
       name: '理科', 
       href: '/science', 
       color: 'subject-physics',
-      description: '物理・化学・生物を総合的に学習',
-      animationMobile: 'fade-in-up',
-      animationTablet: 'fade-in-up'
+      cardColor: 'subject-card-science',
+      description: '物理・化学・生物を総合的に学習'
     },
     { 
       name: '社会', 
       href: '/social', 
       color: 'subject-history-jp',
-      description: '歴史・地理・公民を体系的に理解',
-      animationMobile: 'fade-in-up',
-      animationTablet: 'fade-in-left'
+      cardColor: 'subject-card-social',
+      description: '歴史・地理・公民を体系的に理解'
     },
   ];
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('.subject-section');
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
-    const elements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
-    elements.forEach((el) => observer.observe(el));
+      sections.forEach((section, index) => {
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionHeight = (section as HTMLElement).offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          setActiveIndex(index);
+        }
+      });
+    };
 
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToSubjects = () => {
@@ -113,36 +100,45 @@ export default function Home() {
       </section>
 
       {/* Subjects Section */}
-      <section ref={subjectsRef} className="bg-white">
+      <div ref={subjectsRef}>
         {subjects.map((subject, index) => (
-          <div className="min-h-screen flex items-center justify-center" key={subject.href}>
-            <div className="container-wrapper w-full">
-              <div 
-                className={`subject-card ${isTablet ? subject.animationTablet : subject.animationMobile}`}
-                style={{ 
-                  animationDelay: `${index * 0.2}s`
-                }}
-              >
-                <div className="text-center">
-                  <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
-                    <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
+          <section key={subject.href} className="subject-section">
+            <div 
+              className="subject-card-wrapper"
+              style={{
+                zIndex: subjects.length - index,
+              }}
+            >
+              <div className="container-wrapper w-full">
+                <div 
+                  className={`subject-card ${subject.cardColor}`}
+                  style={{
+                    transform: index <= activeIndex ? 'translateY(0)' : 'translateY(100%)',
+                    opacity: index <= activeIndex ? 1 : 0,
+                    transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-out',
+                  }}
+                >
+                  <div className="text-center">
+                    <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
+                      <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
+                    </div>
+                    <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
+                    <Link 
+                      href={subject.href}
+                      className="btn-primary inline-block"
+                    >
+                      {subject.name}を学習する
+                    </Link>
                   </div>
-                  <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
-                  <Link 
-                    href={subject.href}
-                    className="btn-primary inline-block"
-                  >
-                    {subject.name}を学習する
-                  </Link>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         ))}
-      </section>
+      </div>
 
       {/* Footer */}
-      <footer>
+      <footer className="relative" style={{ zIndex: subjects.length + 1 }}>
         <div className="container-wrapper">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[3vw]">
             <div>

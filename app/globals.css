@@ -262,17 +262,49 @@ p {
   text-align: center;
 }
 
+/* Subject card container */
+.subject-section {
+  position: relative;
+  height: 100vh;
+}
+
+.subject-card-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
 /* Subject card */
 .subject-card {
-  background-color: var(--white);
   border-radius: clamp(1rem, 2vw, 1.5rem);
   padding: clamp(2rem, 5vw, 3rem);
-  box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.1);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 0;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.subject-card-english {
+  background-color: var(--english-sub);
+}
+
+.subject-card-math {
+  background-color: var(--math-sub);
+}
+
+.subject-card-japanese {
+  background-color: var(--japanese-sub);
+}
+
+.subject-card-science {
+  background-color: var(--physics-sub);
+}
+
+.subject-card-social {
+  background-color: var(--history-jp-sub);
 }
 
 /* Footer */
