@@ -1,8 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f3f3;
-  --foreground: #171717;
+  /* Base Colors */
+  --black: #373231;
+  --gray: #262730;
+  --gray-light: #26273033;
+  --white: #f3f3f3;
+
+  /* Main Colors */
+  --main-1: #635d73;
+  --main-2: #de9e86;
+  --main-3: #ab817e;
+  --main-4: #f3f3f3;
+
+  /* Sub Colors */
+  --sub-1: #c36670;
+  --sub-1-light: #c3667099;
+  --sub-2: #f5b180;
+  --sub-2-light: #f5b18099;
+  --sub-3: #f4da24;
+  --sub-3-light: #f4da2499;
+  --sub-4: #2d9058;
+  --sub-4-light: #2d905899;
+  --sub-5: #29534d;
+  --sub-5-light: #29534d99;
+  --sub-6: #5d95a3;
+  --sub-6-light: #5d95a399;
+  --sub-7: #004563;
+  --sub-7-light: #00456399;
+  --sub-8: #731a3d;
+  --sub-8-light: #731a3d99;
+
+  /* Text Colors */
+  --text-1: #373231;
+  --text-2: #f3f3f3;
+  --text-3: #b13b22;
+
+  /* Subject Colors */
+  --english-main: #c3443b;
+  --english-sub: #e0aa7f;
+  --japanese-main: #003c92;
+  --japanese-sub: #a1afd9;
+  --math-main: #0080b8;
+  --math-sub: #79b1da;
+  --physics-main: #56a533;
+  --physics-sub: #b9d88a;
+  --chemistry-main: #00838a;
+  --chemistry-sub: #69bcbf;
+  --biology-main: #278325;
+  --biology-sub: #63a374;
+  --history-jp-main: #eeb537;
+  --history-jp-sub: #f6d898;
+  --history-world-main: #e3c700;
+  --history-world-sub: #e2d17b;
+  --geography-main: #d7cb00;
+  --geography-sub: #ede082;
+
+  /* Default theme */
+  --background: var(--white);
+  --foreground: var(--text-1);
 }
 
 @theme inline {
@@ -12,15 +68,100 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Global styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Utility classes for colors */
+.bg-gradient-main {
+  background: linear-gradient(135deg, var(--main-1) 0%, var(--main-3) 100%);
+}
+
+.bg-gradient-sub {
+  background: linear-gradient(135deg, var(--sub-6) 0%, var(--sub-7) 100%);
+}
+
+/* Text color utilities */
+.text-primary {
+  color: var(--text-1);
+}
+
+.text-secondary {
+  color: var(--text-2);
+}
+
+.text-accent {
+  color: var(--text-3);
+}
+
+/* Subject-specific classes */
+.subject-english {
+  background-color: var(--english-main);
+  color: var(--text-2);
+}
+
+.subject-english-light {
+  background-color: var(--english-sub);
+  color: var(--text-1);
+}
+
+.subject-japanese {
+  background-color: var(--japanese-main);
+  color: var(--text-2);
+}
+
+.subject-japanese-light {
+  background-color: var(--japanese-sub);
+  color: var(--text-1);
+}
+
+.subject-math {
+  background-color: var(--math-main);
+  color: var(--text-2);
+}
+
+.subject-math-light {
+  background-color: var(--math-sub);
+  color: var(--text-1);
+}
+
+/* Button styles using color palette */
+.btn-primary {
+  background-color: var(--main-1);
+  color: var(--text-2);
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--main-2);
+}
+
+.btn-secondary {
+  background-color: var(--sub-1);
+  color: var(--text-2);
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--sub-8);
+}
+
+/* Card styles */
+.card {
+  background-color: var(--white);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-dark {
+  background-color: var(--gray);
+  color: var(--text-2);
+}
+
+/* Subject color hover effects */
+.subject-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }

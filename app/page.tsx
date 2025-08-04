@@ -28,17 +28,17 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-purple-700">
-      <div className="bg-white rounded-lg shadow-2xl p-12 max-w-lg text-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome to My Site</h1>
-        <p className="text-gray-600 mb-8">今日の日付: <span>{date}</span></p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-main">
+      <div className="card rounded-lg p-12 max-w-lg text-center">
+        <h1 className="text-3xl font-bold text-primary mb-4">Welcome to My Site</h1>
+        <p className="text-primary mb-8">今日の日付: <span>{date}</span></p>
         <button 
           onClick={handleClick}
-          className="bg-purple-600 text-white px-8 py-3 rounded-md text-lg font-medium hover:bg-purple-700 transition duration-300"
+          className="btn-primary px-8 py-3 rounded-md text-lg font-medium"
         >
           クリックしてみて
         </button>
-        <p className="mt-8 text-xl text-purple-600">{message}</p>
+        <p className="mt-8 text-xl text-accent">{message}</p>
       </div>
     </div>
   );
