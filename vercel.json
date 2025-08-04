@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd textbook-next && npm run build",
-  "outputDirectory": "textbook-next/.next",
-  "installCommand": "cd textbook-next && npm install"
-}
