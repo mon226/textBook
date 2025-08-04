@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My First Site",
-  description: "Next.jsで作成したサイトです",
+  title: "二子玉川参考書紹介 '25",
+  description: "二子玉川参考書紹介 '25",
 };
 
 export default function RootLayout({
