@@ -64,11 +64,6 @@ export default function Home() {
     };
   }, []);
 
-  const scrollToSubjects = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-    }
-  };
 
   // Calculate card positions based on scroll
   const getCardTransform = (index: number) => {
@@ -184,7 +179,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-[5vw] pt-[5vw] border-t border-gray-light text-center">
-            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 二子玉川参考書紹介 '25</p>
+            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 二子玉川参考書紹介 &apos;25</p>
           </div>
         </div>
       </footer>
