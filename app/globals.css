@@ -299,6 +299,17 @@ p {
   background-color: var(--history-jp-sub);
 }
 
+/* Subject button colors */
+.subject-physics {
+  background-color: var(--physics-main);
+  color: var(--text-2);
+}
+
+.subject-history-jp {
+  background-color: var(--history-jp-main);
+  color: var(--text-2);
+}
+
 /* Footer */
 footer {
   background-color: var(--gray);
