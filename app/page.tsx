@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
   const subjectsRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const subjects = [
     { 
@@ -48,19 +47,36 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('.subject-section');
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
+      
       sections.forEach((section, index) => {
-        const sectionTop = (section as HTMLElement).offsetTop;
-        const sectionHeight = (section as HTMLElement).offsetHeight;
+        const card = section.querySelector('.subject-card') as HTMLElement;
+        if (!card) return;
         
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          setActiveIndex(index);
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate progress of scroll through this section
+        const scrollProgress = (scrollPosition - sectionTop + windowHeight) / windowHeight;
+        
+        if (scrollProgress > 0 && scrollProgress <= 1) {
+          // Card is entering view
+          card.style.transform = `translateY(${(1 - scrollProgress) * 100}%)`;
+          card.style.opacity = String(scrollProgress);
+        } else if (scrollProgress > 1) {
+          // Card is fully visible
+          card.style.transform = 'translateY(0)';
+          card.style.opacity = '1';
+        } else {
+          // Card is below viewport
+          card.style.transform = 'translateY(100%)';
+          card.style.opacity = '0';
         }
       });
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial call
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -113,8 +129,6 @@ export default function Home() {
                 <div 
                   className={`subject-card ${subject.cardColor}`}
                   style={{
-                    transform: index <= activeIndex ? 'translateY(0)' : 'translateY(100%)',
-                    opacity: index <= activeIndex ? 1 : 0,
                     transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-out',
                   }}
                 >
