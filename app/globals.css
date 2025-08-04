@@ -220,3 +220,55 @@ p {
   margin: clamp(1.5rem, 4vw, 3rem);
   padding: clamp(1.5rem, 4vw, 3rem);
 }
+
+/* Scroll animations */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(5vh);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(5vw);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(-5vw);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-up.visible,
+.fade-in-left.visible,
+.fade-in-right.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Hero section */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Subject card */
+.subject-card {
+  background-color: var(--white);
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(2rem, 5vw, 3rem);
+  box-shadow: 0 1vw 3vw rgba(0, 0, 0, 0.1);
+  margin-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+/* Footer */
+footer {
+  background-color: var(--gray);
+  color: var(--text-2);
+  padding: clamp(2rem, 5vw, 3rem) 0;
+}
