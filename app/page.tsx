@@ -2,8 +2,14 @@
 
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register GSAP plugin
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const subjectsRef = useRef<HTMLDivElement>(null);
 
   const subjects = [
@@ -45,39 +51,45 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll('.subject-section');
-      
-      sections.forEach((section, index) => {
-        const card = section.querySelector('.subject-card') as HTMLElement;
-        if (!card) return;
-        
-        const sectionTop = (section as HTMLElement).offsetTop;
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-        
-        // Calculate progress of scroll through this section
-        const scrollProgress = (scrollPosition - sectionTop + windowHeight) / windowHeight;
-        
-        if (scrollProgress > 0 && scrollProgress <= 1) {
-          // Card is entering view
-          card.style.transform = `translateY(${(1 - scrollProgress) * 100}%)`;
-          card.style.opacity = String(scrollProgress);
-        } else if (scrollProgress > 1) {
-          // Card is fully visible
-          card.style.transform = 'translateY(0)';
-          card.style.opacity = '1';
-        } else {
-          // Card is below viewport
-          card.style.transform = 'translateY(100%)';
-          card.style.opacity = '0';
-        }
-      });
-    };
+    if (!containerRef.current) return;
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Clean up previous ScrollTriggers
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+    const cards = gsap.utils.toArray<HTMLElement>('.subject-card-container');
+    
+    cards.forEach((card, index) => {
+      const isLast = index === cards.length - 1;
+      
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top top',
+        end: isLast ? 'bottom top' : '+=110vh',
+        pin: true,
+        pinSpacing: false,
+      });
+
+      if (!isLast) {
+        gsap.set(cards[index + 1], {
+          yPercent: 100
+        });
+
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top top+=80vh',
+          end: 'top top+=100vh',
+          onUpdate: (self) => {
+            gsap.set(cards[index + 1], {
+              yPercent: 100 - (self.progress * 100)
+            });
+          }
+        });
+      }
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
   }, []);
 
   const scrollToSubjects = () => {
@@ -85,9 +97,9 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div ref={containerRef} className="bg-gradient-main">
       {/* Hero Section */}
-      <section className="hero-section bg-gradient-main">
+      <section className="hero-section">
         <div className="container-wrapper">
           <h1 className="font-bold text-secondary mb-[2vw]" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>
             学習プラットフォーム
@@ -116,22 +128,20 @@ export default function Home() {
       </section>
 
       {/* Subjects Section */}
-      <div ref={subjectsRef}>
+      <div ref={subjectsRef} className="relative" style={{ height: `${subjects.length * 110 + 20}vh` }}>
         {subjects.map((subject, index) => (
-          <section key={subject.href} className="subject-section">
-            <div 
-              className="subject-card-wrapper"
-              style={{
-                zIndex: subjects.length - index,
-              }}
-            >
+          <div
+            key={subject.href}
+            className="subject-card-container absolute top-0 left-0 w-full"
+            style={{ 
+              top: `${index * 110}vh`,
+              height: '100vh',
+              zIndex: subjects.length - index
+            }}
+          >
+            <div className="h-full flex items-center justify-center">
               <div className="container-wrapper w-full">
-                <div 
-                  className={`subject-card ${subject.cardColor}`}
-                  style={{
-                    transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease-out',
-                  }}
-                >
+                <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
                   <div className="text-center">
                     <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
                       <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
@@ -147,38 +157,38 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         ))}
       </div>
 
       {/* Footer */}
-      <footer className="relative" style={{ zIndex: subjects.length + 1 }}>
-        <div className="container-wrapper">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[3vw]">
+      <footer className="relative min-h-screen flex flex-col justify-center" style={{ backgroundColor: 'var(--gray)' }}>
+        <div className="container-wrapper py-[5vw]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
             <div>
-              <h3 className="font-bold mb-[1vw]">ページ一覧</h3>
-              <ul className="space-y-[0.5vw]">
-                <li><Link href="/" className="hover:underline">ホーム</Link></li>
+              <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>ページ一覧</h3>
+              <ul className="space-y-[1vw]">
+                <li><Link href="/" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>ホーム</Link></li>
                 {subjects.map((subject) => (
                   <li key={subject.href}>
-                    <Link href={subject.href} className="hover:underline">{subject.name}</Link>
+                    <Link href={subject.href} className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>{subject.name}</Link>
                   </li>
                 ))}
-                <li><Link href="/pdf-viewer" className="hover:underline">PDF閲覧</Link></li>
+                <li><Link href="/pdf-viewer" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>PDF閲覧</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-[1vw]">その他</h3>
-              <ul className="space-y-[0.5vw]">
-                <li><Link href="/policy" className="hover:underline">サイトポリシー</Link></li>
+              <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>その他</h3>
+              <ul className="space-y-[1vw]">
+                <li><Link href="/policy" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>サイトポリシー</Link></li>
               </ul>
             </div>
           </div>
-          <div className="mt-[3vw] pt-[3vw] border-t border-gray-light text-center">
-            <p>&copy; 2024 学習プラットフォーム</p>
+          <div className="mt-[5vw] pt-[5vw] border-t border-gray-light text-center">
+            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 学習プラットフォーム</p>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

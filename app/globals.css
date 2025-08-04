@@ -262,21 +262,7 @@ p {
   text-align: center;
 }
 
-/* Subject card container */
-.subject-section {
-  position: relative;
-  height: 100vh;
-}
-
-.subject-card-wrapper {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+/* Subject card container - removed old sticky implementation */
 
 /* Subject card */
 .subject-card {
