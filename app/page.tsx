@@ -75,15 +75,17 @@ export default function Home() {
     if (typeof window === 'undefined') return 'translateY(100%)';
     
     const cardStart = window.innerHeight + (index * 110 * window.innerHeight / 100);
-    const animationStart = cardStart - (20 * window.innerHeight / 100);
+    const animationStart = cardStart - (30 * window.innerHeight / 100); // Changed from 20vh to 30vh for slower animation
     
     if (scrollY < animationStart) {
       // Card is below viewport
       return 'translateY(100%)';
     } else if (scrollY >= animationStart && scrollY < cardStart) {
       // Card is animating in
-      const progress = (scrollY - animationStart) / (20 * window.innerHeight / 100);
-      return `translateY(${100 - (progress * 100)}%)`;
+      const progress = (scrollY - animationStart) / (30 * window.innerHeight / 100);
+      // Ease-out curve for smoother animation
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      return `translateY(${100 - (easedProgress * 100)}%)`;
     } else {
       // Card is fully visible
       return 'translateY(0)';
@@ -104,7 +106,7 @@ export default function Home() {
       {/* Spacer div to create scrollable area */}
       <div style={{ height: `${totalHeight}px` }} className="bg-gradient-main">
         {/* Hero Section */}
-        <section className="hero-section fixed top-0 left-0 w-full z-10">
+        <section className="hero-section absolute top-0 left-0 w-full z-10">
           <div className="container-wrapper">
             <h1 className="font-bold text-secondary mb-[2vw]" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>
               学習プラットフォーム
@@ -113,12 +115,6 @@ export default function Home() {
               あなたの学習を全力でサポート
             </p>
             <div className="flex flex-col sm:flex-row gap-[2vw] justify-center items-center">
-              <button 
-                onClick={scrollToSubjects}
-                className="btn-primary font-medium"
-              >
-                科目を選ぶ
-              </button>
               <Link 
                 href="/pdf-viewer"
                 className="btn-secondary font-medium"
@@ -126,8 +122,9 @@ export default function Home() {
                 PDF閲覧
               </Link>
             </div>
-            <div className="mt-[8vw] animate-bounce">
-              <p className="text-secondary">↓</p>
+            <div className="mt-[8vw]">
+              <p className="text-secondary animate-bounce">↓</p>
+              <p className="text-secondary mt-[1vw]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>scroll</p>
             </div>
           </div>
         </section>
@@ -187,7 +184,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-[5vw] pt-[5vw] border-t border-gray-light text-center">
-            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 学習プラットフォーム</p>
+            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 二子玉川参考書紹介 '25</p>
           </div>
         </div>
       </footer>

@@ -279,6 +279,8 @@ p {
 
 .subject-card-english {
   background-color: var(--english-sub);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .subject-card-math {
