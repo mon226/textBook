@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
-  const subjectsRef = useRef<HTMLDivElement>(null);
 
   const subjects = [
     { 
@@ -66,11 +65,15 @@ export default function Home() {
   }, []);
 
   const scrollToSubjects = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    }
   };
 
   // Calculate card positions based on scroll
   const getCardTransform = (index: number) => {
+    if (typeof window === 'undefined') return 'translateY(100%)';
+    
     const cardStart = window.innerHeight + (index * 110 * window.innerHeight / 100);
     const animationStart = cardStart - (20 * window.innerHeight / 100);
     
@@ -87,8 +90,14 @@ export default function Home() {
     }
   };
 
-  // Calculate total height needed
-  const totalHeight = window.innerHeight + (subjects.length * 110 * window.innerHeight / 100) + window.innerHeight;
+  // Calculate total height needed (use 100vh as fallback for SSR)
+  const [windowHeight, setWindowHeight] = useState(0);
+  
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+  }, []);
+  
+  const totalHeight = windowHeight ? windowHeight + (subjects.length * 110 * windowHeight / 100) + windowHeight : 700 * (subjects.length + 2);
 
   return (
     <>
