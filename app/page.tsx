@@ -144,9 +144,10 @@ export default function Home() {
                   <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     href={subject.href}
-                    className="btn-primary inline-block"
+                    className={`inline-block ${subject.color} px-[4vw] py-[2vw] rounded-[0.5vw] text-secondary font-medium transition-all duration-300 hover:opacity-80`}
+                    style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
                   >
-                    {subject.name}を学習する
+                    view more
                   </Link>
                 </div>
               </div>
