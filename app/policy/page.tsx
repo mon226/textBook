@@ -1,3 +1,5 @@
+import Footer from '../components/footer';
+
 export default function PolicyPage() {
   return (
     <div className="min-h-screen bg-gradient-main">
@@ -20,6 +22,7 @@ export default function PolicyPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

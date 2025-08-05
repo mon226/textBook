@@ -1,3 +1,5 @@
+import Footer from '../components/footer';
+
 export default function EnglishPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -5,5 +7,6 @@ export default function EnglishPage() {
         <h1 className="text-center">英語ページ</h1>
       </div>
     </div>
+    <Footer />
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Footer from './components/footer';
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
@@ -144,7 +145,7 @@ export default function Home() {
                   <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     href={subject.href}
-                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[1.5vw] rounded-[2vw] text-secondary font-medium transition-all duration-300 hover:opacity-80 relative`}
+                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                   >
                     <span>view more!</span>
@@ -157,40 +158,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Footer - Normal position */}
-      <footer className="relative min-h-screen flex flex-col justify-center bg-gradient-main" style={{ zIndex: 50 }}>
-        {/* Stars */}
-        <div className="stars">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className={`star star-${i + 1}`}></div>
-          ))}
-        </div>
-        <div className="container-wrapper py-[5vw] relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
-            <div>
-              <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>ページ一覧</h3>
-              <ul className="space-y-[1vw]">
-                <li><Link href="/" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>ホーム</Link></li>
-                {subjects.map((subject) => (
-                  <li key={subject.href}>
-                    <Link href={subject.href} className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>{subject.name}</Link>
-                  </li>
-                ))}
-                <li><Link href="/pdf-viewer" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>PDF閲覧</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>その他</h3>
-              <ul className="space-y-[1vw]">
-                <li><Link href="/policy" className="hover:underline text-secondary" style={{ fontSize: 'clamp(1rem, 2vw, 1.125rem)' }}>サイトポリシー</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-[5vw] pt-[5vw] border-t border-gray-light text-center">
-            <p className="text-secondary" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 二子玉川参考書紹介 &apos;25</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
