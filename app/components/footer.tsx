@@ -27,7 +27,7 @@ const Footer = () => {
           ></div>
         ))}
       </div>
-      <div className="container-wrapper py-[5vw] relative z-10">
+      <div className="container-wrapper py-[5vw] px-[3vw] relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
           <div>
             <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>ページ一覧</h3>
