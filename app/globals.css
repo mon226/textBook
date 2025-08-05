@@ -142,76 +142,88 @@ main {
 
 /* Button styles using color palette */
 .btn-primary {
-  position: relative;
   background-color: var(--main-1);
   color: var(--text-2);
   transition: background-color 0.3s ease;
   padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
-  overflow: visible;
-  z-index: 1;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(100% + 0.8vw);
-  height: calc(100% + 0.8vw);
-  border: 0.2vw dashed rgba(255, 255, 255, 0.8);
-  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
-  transform: translate(-50%, -50%) rotate(0deg);
-  transition: transform 0.3s ease;
-  pointer-events: none;
-  /* Custom dash pattern: longer colored segments, shorter gaps */
-  background-image: linear-gradient(to right, transparent 0%, transparent 15%, rgba(255, 255, 255, 0.8) 15%, rgba(255, 255, 255, 0.8) 100%);
-  background-size: 1.5vw 0.2vw;
-  background-repeat: repeat-x;
-  background-position: 0 0;
 }
 
 .btn-primary:hover {
   background-color: var(--main-2);
 }
 
-.btn-primary:hover::before {
-  transform: translate(-50%, -50%) rotate(15deg);
-}
-
 .btn-secondary {
-  position: relative;
   background-color: var(--sub-1);
   color: var(--text-2);
   transition: background-color 0.3s ease;
   padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
-  overflow: visible;
-  z-index: 1;
-}
-
-.btn-secondary::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(100% + 0.8vw);
-  height: calc(100% + 0.8vw);
-  border: 0.2vw dashed rgba(255, 255, 255, 0.8);
-  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
-  transform: translate(-50%, -50%) rotate(0deg);
-  transition: transform 0.3s ease;
-  pointer-events: none;
 }
 
 .btn-secondary:hover {
   background-color: var(--sub-8);
 }
 
-.btn-secondary:hover::before {
-  transform: translate(-50%, -50%) rotate(15deg);
+/* View More button with rotating dashed border */
+.view-more-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.view-more-btn::before {
+  content: '';
+  position: absolute;
+  inset: -0.3vw;
+  border-radius: 9999px;
+  padding: 0.1vw;
+  background: conic-gradient(
+    from 0deg,
+    currentColor 0deg 20deg,
+    transparent 20deg 30deg,
+    currentColor 30deg 50deg,
+    transparent 50deg 60deg,
+    currentColor 60deg 80deg,
+    transparent 80deg 90deg,
+    currentColor 90deg 110deg,
+    transparent 110deg 120deg,
+    currentColor 120deg 140deg,
+    transparent 140deg 150deg,
+    currentColor 150deg 170deg,
+    transparent 170deg 180deg,
+    currentColor 180deg 200deg,
+    transparent 200deg 210deg,
+    currentColor 210deg 230deg,
+    transparent 230deg 240deg,
+    currentColor 240deg 260deg,
+    transparent 260deg 270deg,
+    currentColor 270deg 290deg,
+    transparent 290deg 300deg,
+    currentColor 300deg 320deg,
+    transparent 320deg 330deg,
+    currentColor 330deg 350deg,
+    transparent 350deg 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.view-more-btn:hover::before {
+  animation: rotate-dashes 3s linear infinite;
+}
+
+@keyframes rotate-dashes {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Card styles */

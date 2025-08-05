@@ -145,7 +145,7 @@ export default function Home() {
                   <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     href={subject.href}
-                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative`}
+                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative view-more-btn`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                   >
                     <span>view more!</span>
