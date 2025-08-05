@@ -148,6 +148,20 @@ export default function Home() {
                     className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative view-more-btn`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                   >
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ width: 'calc(100% + 0.6vw)', height: 'calc(100% + 0.6vw)', left: '-0.3vw', top: '-0.3vw' }}>
+                      <rect 
+                        x="0.05vw" 
+                        y="0.05vw" 
+                        width="calc(100% - 0.1vw)" 
+                        height="calc(100% - 0.1vw)" 
+                        rx="9999" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="0.1vw" 
+                        strokeDasharray="1.2vw 0.4vw"
+                        className="view-more-border"
+                      />
+                    </svg>
                     <span>view more!</span>
                     <span className="absolute right-[2vw]">→</span>
                   </Link>

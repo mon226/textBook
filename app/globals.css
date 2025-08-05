@@ -173,48 +173,14 @@ main {
   overflow: visible;
 }
 
-.view-more-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: calc(100% + 0.8vw);
-  height: calc(100% + 0.8vw);
-  border-radius: 9999px;
-  transform: translate(-50%, -50%);
-  background: conic-gradient(
-    from 0deg at center,
-    currentColor 0deg 60deg,
-    transparent 60deg 90deg,
-    currentColor 90deg 150deg,
-    transparent 150deg 180deg,
-    currentColor 180deg 240deg,
-    transparent 240deg 270deg,
-    currentColor 270deg 330deg,
-    transparent 330deg 360deg
-  );
-  -webkit-mask: 
-    radial-gradient(
-      circle,
-      transparent calc(50% - 0.1vw),
-      #000 calc(50% - 0.1vw),
-      #000 calc(50% + 0.1vw),
-      transparent calc(50% + 0.1vw)
-    );
-  mask: 
-    radial-gradient(
-      circle,
-      transparent calc(50% - 0.1vw),
-      #000 calc(50% - 0.1vw),
-      #000 calc(50% + 0.1vw),
-      transparent calc(50% + 0.1vw)
-    );
-  pointer-events: none;
-  transition: transform 0.3s ease;
+/* SVG dashed border animation */
+.view-more-border {
+  transition: stroke-dashoffset 0.3s ease;
+  stroke-dashoffset: 0;
 }
 
-.view-more-btn:hover::before {
-  transform: translate(-50%, -50%) rotate(45deg);
+.view-more-btn:hover .view-more-border {
+  stroke-dashoffset: -1.6vw; /* Move dashes by one pattern length */
 }
 
 /* Card styles */
