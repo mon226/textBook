@@ -104,7 +104,7 @@ export default function Home() {
         <section className="hero-section absolute top-0 left-0 w-full z-10">
           <div className="container-wrapper">
             <h1 className="font-bold text-secondary mb-[2vw]" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)' }}>
-              学習プラットフォーム
+              二子玉川参考書紹介 &apos;25
             </h1>
             <p className="text-secondary mb-[4vw]" style={{ fontSize: 'clamp(1.125rem, 3vw, 1.5rem)' }}>
               あなたの学習を全力でサポート
@@ -159,7 +159,13 @@ export default function Home() {
 
       {/* Footer - Normal position */}
       <footer className="relative min-h-screen flex flex-col justify-center bg-gradient-main" style={{ zIndex: 50 }}>
-        <div className="container-wrapper py-[5vw]">
+        {/* Stars */}
+        <div className="stars">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className={`star star-${i + 1}`}></div>
+          ))}
+        </div>
+        <div className="container-wrapper py-[5vw] relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw]">
             <div>
               <h3 className="font-bold mb-[2vw] text-secondary" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>ページ一覧</h3>
