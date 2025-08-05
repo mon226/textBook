@@ -142,29 +142,130 @@ main {
 
 /* Button styles using color palette */
 .btn-primary {
+  position: relative;
   background-color: var(--main-1);
   color: var(--text-2);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 0.4vw);
+  height: calc(100% + 0.4vw);
+  border: 0.3vw solid rgba(255, 255, 255, 0.3);
+  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 0.8vw);
+  height: calc(100% + 0.8vw);
+  border: 0.2vw solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.6);
+  border-right-color: rgba(255, 255, 255, 0.6);
+  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  animation: rotate-border 2s linear infinite paused;
+}
+
+@keyframes rotate-border {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .btn-primary:hover {
   background-color: var(--main-2);
+  transform: scale(1.02);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+  animation-play-state: running;
 }
 
 .btn-secondary {
+  position: relative;
   background-color: var(--sub-1);
   color: var(--text-2);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
   font-size: clamp(1rem, 2.5vw, 1.125rem);
   border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 0.4vw);
+  height: calc(100% + 0.4vw);
+  border: 0.3vw solid rgba(255, 255, 255, 0.3);
+  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.btn-secondary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 0.8vw);
+  height: calc(100% + 0.8vw);
+  border: 0.2vw solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.6);
+  border-right-color: rgba(255, 255, 255, 0.6);
+  border-radius: clamp(0.25rem, 0.8vw, 0.375rem);
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  animation: rotate-border 2s linear infinite paused;
 }
 
 .btn-secondary:hover {
   background-color: var(--sub-8);
+  transform: scale(1.02);
+}
+
+.btn-secondary:hover::before {
+  opacity: 1;
+}
+
+.btn-secondary:hover::after {
+  opacity: 1;
+  animation-play-state: running;
 }
 
 /* Card styles */
