@@ -176,54 +176,45 @@ main {
 .view-more-btn::before {
   content: '';
   position: absolute;
-  inset: -0.3vw;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 0.8vw);
+  height: calc(100% + 0.8vw);
   border-radius: 9999px;
-  padding: 0.1vw;
+  transform: translate(-50%, -50%);
   background: conic-gradient(
-    from 0deg,
-    currentColor 0deg 20deg,
-    transparent 20deg 30deg,
-    currentColor 30deg 50deg,
-    transparent 50deg 60deg,
-    currentColor 60deg 80deg,
-    transparent 80deg 90deg,
-    currentColor 90deg 110deg,
-    transparent 110deg 120deg,
-    currentColor 120deg 140deg,
-    transparent 140deg 150deg,
-    currentColor 150deg 170deg,
-    transparent 170deg 180deg,
-    currentColor 180deg 200deg,
-    transparent 200deg 210deg,
-    currentColor 210deg 230deg,
-    transparent 230deg 240deg,
-    currentColor 240deg 260deg,
-    transparent 260deg 270deg,
-    currentColor 270deg 290deg,
-    transparent 290deg 300deg,
-    currentColor 300deg 320deg,
-    transparent 320deg 330deg,
-    currentColor 330deg 350deg,
-    transparent 350deg 360deg
+    from 0deg at center,
+    currentColor 0deg 60deg,
+    transparent 60deg 90deg,
+    currentColor 90deg 150deg,
+    transparent 150deg 180deg,
+    currentColor 180deg 240deg,
+    transparent 240deg 270deg,
+    currentColor 270deg 330deg,
+    transparent 330deg 360deg
   );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
+  -webkit-mask: 
+    radial-gradient(
+      circle,
+      transparent calc(50% - 0.1vw),
+      #000 calc(50% - 0.1vw),
+      #000 calc(50% + 0.1vw),
+      transparent calc(50% + 0.1vw)
+    );
+  mask: 
+    radial-gradient(
+      circle,
+      transparent calc(50% - 0.1vw),
+      #000 calc(50% - 0.1vw),
+      #000 calc(50% + 0.1vw),
+      transparent calc(50% + 0.1vw)
+    );
   pointer-events: none;
   transition: transform 0.3s ease;
 }
 
 .view-more-btn:hover::before {
-  animation: rotate-dashes 3s linear infinite;
-}
-
-@keyframes rotate-dashes {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 /* Card styles */
