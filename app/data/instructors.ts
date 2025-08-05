@@ -9,7 +9,7 @@ export interface Instructor {
     university: string;
     department?: string;
   };
-  subjects?: string[];
+  subjects?: string;
   color: string;
 }
 
@@ -22,7 +22,7 @@ export const instructors: Instructor[] = [
       highSchool: '私立中高一貫校',
       university: '医学部'
     },
-    subjects: ['数学', '英語'],
+    subjects: '数学・英語など',
     color: 'sub-6'
   },
   {
@@ -45,7 +45,7 @@ export const instructors: Instructor[] = [
       university: '東工大',
       department: '情報理工学院'
     },
-    subjects: ['数学', '物理'],
+    subjects: '数学・物理など',
     color: 'sub-5'
   },
   {
@@ -57,7 +57,7 @@ export const instructors: Instructor[] = [
       university: '慶應義塾大学',
       department: '理工学部'
     },
-    subjects: ['数学'],
+    subjects: '数学など',
     color: 'sub-3'
   },
   {
@@ -69,7 +69,7 @@ export const instructors: Instructor[] = [
       university: '早稲田大学',
       department: '文化構想学部'
     },
-    subjects: ['国語', '日本史'],
+    subjects: '国語・日本史',
     color: 'sub-8'
   },
   {
@@ -80,7 +80,7 @@ export const instructors: Instructor[] = [
       highSchool: '私立中高一貫校',
       university: '東大理一→工学系'
     },
-    subjects: ['数学', '英語', '国語'],
+    subjects: '数学・英語・国語など',
     color: 'sub-4'
   },
   {
@@ -114,7 +114,7 @@ export const instructors: Instructor[] = [
       university: '早稲田大学',
       department: '基幹理工学部'
     },
-    subjects: ['数学'],
+    subjects: '数学など',
     color: 'japanese-sub'
   },
   {
@@ -126,7 +126,7 @@ export const instructors: Instructor[] = [
       university: '早稲田大学',
       department: '法学部'
     },
-    subjects: ['英語'],
+    subjects: '英語など',
     color: 'japanese-main'
   },
   {
@@ -149,7 +149,7 @@ export const instructors: Instructor[] = [
       university: '慶應義塾大学',
       department: '薬学部'
     },
-    subjects: ['数学'],
+    subjects: '数学など',
     color: 'history-jp-main'
   },
   {
@@ -161,7 +161,7 @@ export const instructors: Instructor[] = [
       university: '立教大学',
       department: '法学部'
     },
-    subjects: ['英語'],
+    subjects: '英語など',
     color: 'english-main'
   }
 ];
