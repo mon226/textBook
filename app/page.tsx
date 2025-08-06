@@ -247,11 +247,14 @@ export default function Home() {
           >
             <div className="container-wrapper w-full">
               <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
-                <div className="text-center">
-                  <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
-                    <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
-                  </div>
-                  <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
+                {/* 上部30% */}
+                <div className="h-[30%] px-[clamp(2rem,5vw,3rem)] py-[clamp(2rem,5vw,3rem)]">
+                  <div className="text-center h-full flex items-center justify-center">
+                    <div>
+                      <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
+                        <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
+                      </div>
+                      <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     ref={(el) => { buttonRefs.current[index] = el; }}
                     href={subject.href}
@@ -341,6 +344,12 @@ export default function Home() {
                     <span>view more!</span>
                     <span className="absolute right-[2vw]">→</span>
                   </Link>
+                    </div>
+                  </div>
+                </div>
+                {/* 下部70% */}
+                <div className="h-[70%]">
+                  {/* ここに今後コンテンツを追加 */}
                 </div>
               </div>
             </div>

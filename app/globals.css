@@ -285,14 +285,13 @@ p {
   border-radius: clamp(1.5rem, 3vw, 2.5rem);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  padding: clamp(2rem, 5vw, 3rem);
+  padding: 0;
   width: 100%;
   max-width: 960px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .subject-card-english {
