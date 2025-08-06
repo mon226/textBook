@@ -172,8 +172,8 @@ width: 768px;
     - 半円の半径: h/2 + d
     - SVGサイズ: 幅 w + 2(r+d)、高さ h + 2d
     - viewBox(0-100)への変換計算を実施
-  - strokeDasharray: "4.8 1.6"（実線部分が長く、透明部分が短い）
-  - 半円のstrokeWidth: 0.6（細め）、上下の線のstrokeWidth: 1.0（太め）
+  - strokeDasharray: "10 2"（実線部分が長く、透明部分が短い）
+  - 半円のstrokeWidth: 0.5（細め）、上下の線のstrokeWidth: 1.2（太め）
   - vectorEffect="non-scaling-stroke"で線幅を保持
   - generateSVGPaths関数でボタンサイズに応じたパスを生成
   - useRefでボタンサイズを測定し、レスポンシブ対応

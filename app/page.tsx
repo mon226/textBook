@@ -261,8 +261,8 @@ export default function Home() {
                                 d={paths.leftSemicircle}
                                 fill="none" 
                                 stroke={subject.colorCode} 
-                                strokeWidth="0.6" 
-                                strokeDasharray="4.8 1.6"
+                                strokeWidth="0.5" 
+                                strokeDasharray="10 2"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
                               />
@@ -271,8 +271,8 @@ export default function Home() {
                                 d={paths.rightSemicircle}
                                 fill="none" 
                                 stroke={subject.colorCode} 
-                                strokeWidth="0.6" 
-                                strokeDasharray="4.8 1.6"
+                                strokeWidth="0.5" 
+                                strokeDasharray="10 2"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
                               />
@@ -283,8 +283,8 @@ export default function Home() {
                                 x2={paths.topLine.x2}
                                 y2={paths.topLine.y2}
                                 stroke={subject.colorCode} 
-                                strokeWidth="1.0" 
-                                strokeDasharray="4.8 1.6"
+                                strokeWidth="1.2" 
+                                strokeDasharray="10 2"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
                               />
@@ -295,8 +295,8 @@ export default function Home() {
                                 x2={paths.bottomLine.x2}
                                 y2={paths.bottomLine.y2}
                                 stroke={subject.colorCode} 
-                                strokeWidth="1.0" 
-                                strokeDasharray="4.8 1.6"
+                                strokeWidth="1.2" 
+                                strokeDasharray="10 2"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
                               />
