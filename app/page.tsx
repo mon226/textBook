@@ -36,7 +36,6 @@ export default function Home() {
       cardColor: 'subject-card-english',
       description: '英語の基礎から応用まで学習できます',
       colorCode: '#c3443b',
-      subItems: ['英単語', '英文法', '長文読解', 'リスニング', '速読']
     },
     { 
       name: '数学', 
@@ -45,7 +44,6 @@ export default function Home() {
       cardColor: 'subject-card-math',
       description: '数学の問題演習と解説を提供します',
       colorCode: '#0080b8',
-      subItems: ['勉強の進め方〜数学編〜', '数学参考書一覧', '講師陣の使用していた参考書', '共通テストと数学']
     },
     { 
       name: '国語', 
@@ -54,7 +52,6 @@ export default function Home() {
       cardColor: 'subject-card-japanese',
       description: '読解力と表現力を養います',
       colorCode: '#003c92',
-      subItems: ['現代文なんでも相談室']
     },
     { 
       name: '理科', 
@@ -63,7 +60,6 @@ export default function Home() {
       cardColor: 'subject-card-science',
       description: '物理・化学・生物を総合的に学習',
       colorCode: '#56a533',
-      subItems: ['勉強の進め方〜理科編〜', '理科の参考書']
     },
     { 
       name: '社会', 
@@ -72,7 +68,6 @@ export default function Home() {
       cardColor: 'subject-card-social',
       description: '歴史・地理・公民を体系的に理解',
       colorCode: '#eeb537',
-      subItems: ['社会のお悩み解決特集']
     },
   ];
 
@@ -251,8 +246,8 @@ export default function Home() {
             }}
           >
             <div className="container-wrapper w-full">
-              <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto flex flex-col`}>
-                <div className="text-center pt-[5vw]">
+              <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
+                <div className="text-center">
                   <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
                     <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
                   </div>
@@ -346,27 +341,6 @@ export default function Home() {
                     <span>view more!</span>
                     <span className="absolute right-[2vw]">→</span>
                   </Link>
-                </div>
-                
-                {/* 小項目ボタン */}
-                <div className="flex-1 flex flex-col justify-center px-[5vw] pb-[5vw]">
-                  <div className="space-y-[2vw]">
-                    {subject.subItems.map((item, itemIndex) => (
-                      <button
-                        key={itemIndex}
-                        className="w-full py-[2.5vw] px-[4vw] text-left font-medium transition-all duration-300 hover:opacity-80"
-                        style={{
-                          backgroundColor: mixWithWhite(subject.colorCode, 0.85),
-                          border: `2px solid ${subject.colorCode}`,
-                          color: subject.colorCode,
-                          borderRadius: 'clamp(0.5rem, 1vw, 0.75rem)',
-                          fontSize: 'clamp(0.875rem, 2vw, 1rem)'
-                        }}
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
