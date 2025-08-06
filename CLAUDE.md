@@ -160,11 +160,12 @@ width: 768px;
 - `.view-more-btn` クラスを適用
 - ホバー時に点線が移動するアニメーション（ベルトコンベアのような動き）
 - 実装詳細:
-  - SVGを使用して楕円形の点線ボーダーを作成
+  - SVGを使用して長方形+角丸の点線ボーダーを作成
+  - rx/ry="calc(2vw + 0.4vw)" でボタンの形状に合わせた角丸
   - strokeDasharray: "1.2vw 0.4vw"（実線部分が長く、透明部分が短い）
-  - currentColorを使用して各科目の色に自動適応
-  - ホバー時にstroke-dashoffsetを変更して点線を移動
-  - 0.3秒のtransitionでスムーズなアニメーション
+  - 各科目のcolorCodeを使用してボタンと同じ色の点線
+  - ホバー時にstroke-dashoffset: -4vwで点線を大きく移動
+  - 0.4秒のtransitionでスムーズなアニメーション
 
 ## 作業フロー（必須手順）
 

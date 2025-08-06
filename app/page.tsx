@@ -160,7 +160,8 @@ export default function Home() {
                         y="0" 
                         width="100%" 
                         height="100%" 
-                        rx="9999" 
+                        rx="calc(2vw + 0.4vw)" 
+                        ry="calc(2vw + 0.4vw)" 
                         fill="none" 
                         stroke={subject.colorCode} 
                         strokeWidth="0.1vw" 
