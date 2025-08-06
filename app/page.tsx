@@ -60,8 +60,8 @@ export default function Home() {
     const r = h / 2; // ボタンのradius
     
     // ボタンと点線の距離（ピクセル）
-    const d = h * 0.1; // 高さの10%（調整可能）
-
+    const d = h * 0.10; // 高さの10%
+    
     // SVGの全体サイズ
     const svgWidth = w + 2 * (r + d);
     const svgHeight = h + 2 * d;
@@ -244,10 +244,10 @@ export default function Home() {
                       <svg 
                         className="absolute inset-0 pointer-events-none" 
                         style={{ 
-                          width: `calc(100% + ${buttonDimensions[index].height * 1.3}px)`,
-                          height: `calc(100% + ${buttonDimensions[index].height * 0.3}px)`,
-                          left: `-${buttonDimensions[index].height * 0.65}px`,
-                          top: `-${buttonDimensions[index].height * 0.15}px`
+                          width: `calc(100% + ${buttonDimensions[index].height * 1.2}px)`,
+                          height: `calc(100% + ${buttonDimensions[index].height * 0.2}px)`,
+                          left: `-${buttonDimensions[index].height * 0.6}px`,
+                          top: `-${buttonDimensions[index].height * 0.1}px`
                         }}
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
@@ -261,7 +261,7 @@ export default function Home() {
                                 d={paths.leftSemicircle}
                                 fill="none" 
                                 stroke={subject.colorCode} 
-                                strokeWidth="1" 
+                                strokeWidth="0.8" 
                                 strokeDasharray="4.8 1.6"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
@@ -271,7 +271,7 @@ export default function Home() {
                                 d={paths.rightSemicircle}
                                 fill="none" 
                                 stroke={subject.colorCode} 
-                                strokeWidth="1" 
+                                strokeWidth="0.8" 
                                 strokeDasharray="4.8 1.6"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
@@ -283,7 +283,7 @@ export default function Home() {
                                 x2={paths.topLine.x2}
                                 y2={paths.topLine.y2}
                                 stroke={subject.colorCode} 
-                                strokeWidth="1.5" 
+                                strokeWidth="0.8" 
                                 strokeDasharray="4.8 1.6"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"
@@ -295,7 +295,7 @@ export default function Home() {
                                 x2={paths.bottomLine.x2}
                                 y2={paths.bottomLine.y2}
                                 stroke={subject.colorCode} 
-                                strokeWidth="1.5" 
+                                strokeWidth="0.8" 
                                 strokeDasharray="4.8 1.6"
                                 className="view-more-border"
                                 vectorEffect="non-scaling-stroke"

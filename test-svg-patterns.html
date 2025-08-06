@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Border Patterns Test</title>
+    <style>
+        body {
+            padding: 2rem;
+            background: #f0f0f0;
+            font-family: sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+        .pattern-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .button-wrapper {
+            position: relative;
+            display: inline-block;
+            margin: 2rem;
+        }
+        .button {
+            background: #c3443b;
+            color: white;
+            padding: 0.8rem 3rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            position: relative;
+        }
+        .pattern-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .code {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        svg {
+            pointer-events: none;
+        }
+        .view-more-border {
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.4s ease;
+        }
+        .button-wrapper:hover .view-more-border {
+            stroke-dashoffset: -4vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SVG Border Pattern Tests</h1>
+        
+        <!-- Pattern 1: stroke-linejoin="round" -->
+        <div class="pattern-section">
+            <div class="pattern-title">Pattern 1: stroke-linejoin="round"</div>
+            <div class="button-wrapper">
+                <a href="#" class="button">view more!</a>
+                <svg style="position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px);">
+                    <rect 
+                        x="0" 
+                        y="0" 
+                        width="100%" 
+                        height="100%" 
+                        rx="24" 
+                        ry="24" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        class="view-more-border"
+                    />
+                </svg>
+            </div>
+            <div class="code">
+                stroke-linejoin="round"<br>
+                stroke-linecap="round"
+            </div>
+        </div>
+
+        <!-- Pattern 2: Path -->
+        <div class="pattern-section">
+            <div class="pattern-title">Pattern 2: Path with precise control</div>
+            <div class="button-wrapper">
+                <a href="#" class="button">view more!</a>
+                <svg style="position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px);">
+                    <defs>
+                        <clipPath id="outer-clip">
+                            <rect x="0" y="0" width="100%" height="100%" rx="24" ry="24" />
+                        </clipPath>
+                    </defs>
+                    <g clip-path="url(#outer-clip)">
+                        <path 
+                            d="M 24 0 L calc(100% - 24px) 0 Q 100% 0 100% 24 L 100% calc(100% - 24px) Q 100% 100% calc(100% - 24px) 100% L 24 100% Q 0 100% 0 calc(100% - 24px) L 0 24 Q 0 0 24 0"
+                            fill="none" 
+                            stroke="#c3443b" 
+                            stroke-width="2" 
+                            stroke-dasharray="12 4"
+                            class="view-more-border"
+                            id="path-border"
+                        />
+                    </g>
+                </svg>
+            </div>
+            <div class="code">
+                Using path with quadratic curves (Q command)<br>
+                Allows more precise control over corners
+            </div>
+        </div>
+
+        <!-- Pattern 3: Multiple elements -->
+        <div class="pattern-section">
+            <div class="pattern-title">Pattern 3: Multiple SVG elements (4 lines + 4 arcs)</div>
+            <div class="button-wrapper">
+                <a href="#" class="button">view more!</a>
+                <svg style="position: absolute; top: -4px; left: -4px; width: calc(100% + 8px); height: calc(100% + 8px);">
+                    <!-- Top line -->
+                    <line 
+                        x1="24" y1="0" 
+                        x2="calc(100% - 24px)" y2="0" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Right line -->
+                    <line 
+                        x1="100%" y1="24" 
+                        x2="100%" y2="calc(100% - 24px)" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Bottom line -->
+                    <line 
+                        x1="calc(100% - 24px)" y1="100%" 
+                        x2="24" y2="100%" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Left line -->
+                    <line 
+                        x1="0" y1="calc(100% - 24px)" 
+                        x2="0" y2="24" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    
+                    <!-- Top-right arc -->
+                    <path 
+                        d="M calc(100% - 24px) 0 A 24 24 0 0 1 100% 24" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Bottom-right arc -->
+                    <path 
+                        d="M 100% calc(100% - 24px) A 24 24 0 0 1 calc(100% - 24px) 100%" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Bottom-left arc -->
+                    <path 
+                        d="M 24 100% A 24 24 0 0 1 0 calc(100% - 24px)" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Top-left arc -->
+                    <path 
+                        d="M 0 24 A 24 24 0 0 1 24 0" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                </svg>
+            </div>
+            <div class="code">
+                4 separate lines + 4 arc paths<br>
+                Most complex but potentially most accurate
+            </div>
+        </div>
+
+        <!-- Pattern 4: New approach -->
+        <div class="pattern-section">
+            <div class="pattern-title">Pattern 4: Left/Right semicircles + Top/Bottom lines</div>
+            <div class="button-wrapper">
+                <a href="#" class="button">view more!</a>
+                <svg style="position: absolute; top: -4px; left: -28px; width: calc(100% + 56px); height: calc(100% + 8px);" id="pattern4-svg">
+                    <!-- Left semicircle -->
+                    <path 
+                        d="M 52 0 A 24 24 0 0 0 52 100%" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                        id="left-semicircle"
+                    />
+                    <!-- Right semicircle -->
+                    <path 
+                        d="M calc(100% - 52px) 100% A 24 24 0 0 0 calc(100% - 52px) 0" 
+                        fill="none" 
+                        stroke="#c3443b" 
+                        stroke-width="2" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                        id="right-semicircle"
+                    />
+                    <!-- Top line (reversed direction, extended) -->
+                    <line 
+                        x1="calc(100% - 48px)" y1="0" 
+                        x2="48" y2="0" 
+                        stroke="#c3443b" 
+                        stroke-width="3" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                    <!-- Bottom line (extended) -->
+                    <line 
+                        x1="48" y1="100%" 
+                        x2="calc(100% - 48px)" y2="100%" 
+                        stroke="#c3443b" 
+                        stroke-width="3" 
+                        stroke-dasharray="12 4"
+                        class="view-more-border"
+                    />
+                </svg>
+            </div>
+            <div class="code">
+                Left semicircle + Right semicircle + Top line + Bottom line<br>
+                Natural handling of corners with continuous curves
+            </div>
+        </div>
+
+        <div class="pattern-section">
+            <h2>Observations:</h2>
+            <ul>
+                <li><strong>Pattern 1</strong>: Simplest implementation, stroke-linejoin helps smooth corners</li>
+                <li><strong>Pattern 2</strong>: Single path with quadratic curves, good control but complex</li>
+                <li><strong>Pattern 3</strong>: Most complex, separates straight lines from curves for maximum control</li>
+            </ul>
+            <p>Note: The dash pattern synchronization across multiple elements (Pattern 3) can be challenging.</p>
+        </div>
+    </div>
+
+    <script>
+        // Fix the path patterns to use proper syntax
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pattern 2
+            const pathBorder = document.getElementById('path-border');
+            if (pathBorder) {
+                const rect = pathBorder.parentElement.parentElement.getBoundingClientRect();
+                const width = rect.width;
+                const height = rect.height;
+                const radius = 24;
+                
+                const pathData = `
+                    M ${radius} 0 
+                    L ${width - radius} 0 
+                    Q ${width} 0 ${width} ${radius} 
+                    L ${width} ${height - radius} 
+                    Q ${width} ${height} ${width - radius} ${height} 
+                    L ${radius} ${height} 
+                    Q 0 ${height} 0 ${height - radius} 
+                    L 0 ${radius} 
+                    Q 0 0 ${radius} 0
+                `;
+                pathBorder.setAttribute('d', pathData.trim());
+            }
+
+            // Pattern 4 - semicircles
+            const pattern4Svg = document.getElementById('pattern4-svg');
+            if (pattern4Svg) {
+                const rect = pattern4Svg.getBoundingClientRect();
+                const height = rect.height;
+                
+                // Update left semicircle (moved to x=52)
+                const leftSemicircle = document.getElementById('left-semicircle');
+                if (leftSemicircle) {
+                    leftSemicircle.setAttribute('d', `M 52 0 A 24 24 0 0 0 52 ${height}`);
+                }
+                
+                // Update right semicircle (moved to width-52)
+                const rightSemicircle = document.getElementById('right-semicircle');
+                if (rightSemicircle) {
+                    const width = rect.width;
+                    rightSemicircle.setAttribute('d', `M ${width - 52} ${height} A 24 24 0 0 0 ${width - 52} 0`);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

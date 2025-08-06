@@ -165,7 +165,7 @@ width: 768px;
   - 数学的定義に基づく実装:
     - ボタン: 幅w、高さh、radius=h/2
     - ボタン中心を(0,0)として計算
-    - 点線との距離: d = h * 0.15
+    - 点線との距離: d = h * 0.10
     - 上下線のy座標: ±(d + h/2)
     - 直線の長さ: w - h
     - 左半円の中心: (-(w-h)/2, 0)、右半円の中心: ((w-h)/2, 0)
@@ -173,7 +173,7 @@ width: 768px;
     - SVGサイズ: 幅 w + 2(r+d)、高さ h + 2d
     - viewBox(0-100)への変換計算を実施
   - strokeDasharray: "4.8 1.6"（実線部分が長く、透明部分が短い）
-  - 上下の線はstrokeWidth: 0.6（半円の0.4より太く）
+  - 半円のstrokeWidth: 0.8、上下の線のstrokeWidth: 0.8
   - vectorEffect="non-scaling-stroke"で線幅を保持
   - generateSVGPaths関数でボタンサイズに応じたパスを生成
   - useRefでボタンサイズを測定し、レスポンシブ対応
