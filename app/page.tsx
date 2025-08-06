@@ -62,7 +62,7 @@ export default function Home() {
     const lineAdjustment = aspectRatio > 4 ? 5 : 0; // アスペクト比が4以上なら調整
     
     // モバイルとPCで微調整
-    const semicircleX = 17.5;
+    const semicircleX = 17.5 - lineAdjustment; // 半円も内側に移動
     const semicircleRadiusX = 12.5;
     const lineStart = 15 - lineAdjustment; // 横長の場合、より内側から開始
     const lineEnd = 85 + lineAdjustment; // 横長の場合、より外側まで延長

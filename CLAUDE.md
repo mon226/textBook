@@ -162,12 +162,15 @@ width: 768px;
 - 実装詳細:
   - SVGを使用して4要素構成（左半円、右半円、上線、下線）
   - viewBox="0 0 100 100"で数値座標を使用
-  - 半円: x=17.5の位置、半径12.5（横）×50（縦）の楕円弧
-  - 上下の線: x=15〜85の範囲（半円と2.5の重なり）
+  - 基本値: 半円x=17.5、半径12.5×50、線x=15〜85
+  - アスペクト比による動的調整:
+    - 横長ボタン（アスペクト比>4）の場合、lineAdjustment=5
+    - 半円位置: 17.5 - lineAdjustment（内側に移動）
+    - 線の範囲: (15-lineAdjustment)〜(85+lineAdjustment)（延長）
   - strokeDasharray: "4.8 1.6"（実線部分が長く、透明部分が短い）
   - 上下の線はstrokeWidth: 0.6（半円の0.4より太く）
   - vectorEffect="non-scaling-stroke"で線幅を保持
-  - generateSVGPaths関数でボタンサイズに応じたパスを生成（現在は固定値使用）
+  - generateSVGPaths関数でボタンサイズに応じたパスを生成
   - useRefでボタンサイズを測定し、レスポンシブ対応
   - 各科目のcolorCodeを使用してボタンと同じ色の点線
   - ホバー時にstroke-dashoffset: -4vwで点線を大きく移動
