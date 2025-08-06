@@ -236,8 +236,14 @@ export default function Home() {
                   <Link 
                     ref={(el) => { buttonRefs.current[index] = el; }}
                     href={subject.href}
-                    className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative view-more-btn`}
-                    style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
+                    className={`inline-flex items-center px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full font-medium transition-all duration-300 hover:opacity-90 relative view-more-btn`}
+                    style={{ 
+                      fontSize: 'clamp(0.875rem, 2vw, 1rem)', 
+                      minWidth: '200px',
+                      backgroundColor: `${subject.colorCode}20`,
+                      border: `2px solid ${subject.colorCode}80`,
+                      color: subject.colorCode
+                    }}
                     data-color={subject.color}
                   >
                     {buttonDimensions[index] && (
