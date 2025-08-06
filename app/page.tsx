@@ -274,10 +274,10 @@ export default function Home() {
                 <div className="h-[30%] px-[clamp(2rem,5vw,3rem)] py-[clamp(2rem,5vw,3rem)]">
                   <div className="text-center h-full flex items-center justify-center">
                     <div>
-                      <div className={`${subject.color} inline-block px-[5vw] py-[3vw] rounded-[1vw] mb-[4vw]`}>
+                      <div className={`${subject.color} inline-block px-[1vw] py-[1vw] rounded-[1vw]`}>
                         <h2 className="font-bold text-secondary" style={{ fontSize: 'clamp(2rem, 6vw, 3rem)' }}>{subject.name}</h2>
                       </div>
-                      <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
+                      <p className="text-primary" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
                     ref={(el) => { buttonRefs.current[index] = el; }}
                     href={subject.href}
