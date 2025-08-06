@@ -154,17 +154,44 @@ export default function Home() {
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                     data-color={subject.color}
                   >
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ width: 'calc(100% + 0.8vw)', height: 'calc(100% + 0.8vw)', left: '-0.4vw', top: '-0.4vw' }}>
-                      <rect 
-                        x="0" 
-                        y="0" 
-                        width="100%" 
-                        height="100%" 
-                        rx="calc(2vw + 0.4vw)" 
-                        ry="calc(2vw + 0.4vw)" 
+                    <svg className="absolute inset-0 pointer-events-none" style={{ width: 'calc(100% + 2.8vw)', height: 'calc(100% + 0.8vw)', left: '-1.4vw', top: '-0.4vw' }}>
+                      {/* Left semicircle */}
+                      <path 
+                        d={`M 2.6vw 0 A 1.2vw 1.2vw 0 0 0 2.6vw 100%`}
                         fill="none" 
                         stroke={subject.colorCode} 
                         strokeWidth="0.1vw" 
+                        strokeDasharray="1.2vw 0.4vw"
+                        className="view-more-border"
+                      />
+                      {/* Right semicircle */}
+                      <path 
+                        d={`M calc(100% - 2.6vw) 100% A 1.2vw 1.2vw 0 0 0 calc(100% - 2.6vw) 0`}
+                        fill="none" 
+                        stroke={subject.colorCode} 
+                        strokeWidth="0.1vw" 
+                        strokeDasharray="1.2vw 0.4vw"
+                        className="view-more-border"
+                      />
+                      {/* Top line */}
+                      <line 
+                        x1="calc(100% - 2.4vw)" 
+                        y1="0" 
+                        x2="2.4vw" 
+                        y2="0" 
+                        stroke={subject.colorCode} 
+                        strokeWidth="0.15vw" 
+                        strokeDasharray="1.2vw 0.4vw"
+                        className="view-more-border"
+                      />
+                      {/* Bottom line */}
+                      <line 
+                        x1="2.4vw" 
+                        y1="100%" 
+                        x2="calc(100% - 2.4vw)" 
+                        y2="100%" 
+                        stroke={subject.colorCode} 
+                        strokeWidth="0.15vw" 
                         strokeDasharray="1.2vw 0.4vw"
                         className="view-more-border"
                       />
