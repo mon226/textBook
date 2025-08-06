@@ -58,21 +58,33 @@ export default function Home() {
     const aspectRatio = width / height;
     const isMobile = width < 150; // おおよそのモバイルボタンの幅
     
-    // 横長のボタンの場合、直線を内側に寄せる（より長く見せる）
-    const lineAdjustment = aspectRatio > 4 ? 5 : 0; // アスペクト比が4以上なら調整
-    
-    // モバイルとPCで微調整
-    const semicircleX = 17.5 - lineAdjustment; // 半円も内側に移動
-    const semicircleRadiusX = 12.5;
-    const lineStart = 15 - lineAdjustment; // 横長の場合、より内側から開始
-    const lineEnd = 85 + lineAdjustment; // 横長の場合、より外側まで延長
-    
-    return {
-      leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
-      rightSemicircle: `M ${100 - semicircleX} 100 A ${semicircleRadiusX} 50 0 0 0 ${100 - semicircleX} 0`,
-      topLine: { x1: lineEnd, y1: 0, x2: lineStart, y2: 0 },
-      bottomLine: { x1: lineStart, y1: 100, x2: lineEnd, y2: 100 }
-    };
+    if (isMobile || aspectRatio > 4) {
+      // スマホ版の調整
+      const semicircleX = 25; // より中央寄りに（17.5 → 25）
+      const semicircleRadiusX = 20; // 半円を大きく（12.5 → 20）
+      const lineStart = 20; // 線の開始位置（半円に近づける）
+      const lineEnd = 80; // 線の終了位置
+      
+      return {
+        leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
+        rightSemicircle: `M ${100 - semicircleX} 100 A ${semicircleRadiusX} 50 0 0 0 ${100 - semicircleX} 0`,
+        topLine: { x1: lineEnd, y1: 0, x2: lineStart, y2: 0 },
+        bottomLine: { x1: lineStart, y1: 100, x2: lineEnd, y2: 100 }
+      };
+    } else {
+      // PC版（従来の値）
+      const semicircleX = 17.5;
+      const semicircleRadiusX = 12.5;
+      const lineStart = 15;
+      const lineEnd = 85;
+      
+      return {
+        leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
+        rightSemicircle: `M ${100 - semicircleX} 100 A ${semicircleRadiusX} 50 0 0 0 ${100 - semicircleX} 0`,
+        topLine: { x1: lineEnd, y1: 0, x2: lineStart, y2: 0 },
+        bottomLine: { x1: lineStart, y1: 100, x2: lineEnd, y2: 100 }
+      };
+    }
   };
 
   // ボタンのサイズを測定
@@ -208,7 +220,12 @@ export default function Home() {
                     {buttonDimensions[index] && (
                       <svg 
                         className="absolute inset-0 pointer-events-none" 
-                        style={{ width: 'calc(100% + 2.8vw)', height: 'calc(100% + 0.8vw)', left: '-1.4vw', top: '-0.4vw' }}
+                        style={{ 
+                          width: buttonDimensions[index].width > 150 ? 'calc(100% + 2.8vw)' : 'calc(100% + 5vw)', 
+                          height: buttonDimensions[index].width > 150 ? 'calc(100% + 0.8vw)' : 'calc(100% + 2vw)', 
+                          left: buttonDimensions[index].width > 150 ? '-1.4vw' : '-2.5vw', 
+                          top: buttonDimensions[index].width > 150 ? '-0.4vw' : '-1vw' 
+                        }}
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
                       >
