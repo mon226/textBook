@@ -10,6 +10,7 @@ export default function Home() {
   const buttonRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   // 色を白と混ぜる関数
+  
   const mixWithWhite = (color: string, whiteRatio: number) => {
     // HEXカラーをRGBに変換
     const hex = color.replace('#', '');
