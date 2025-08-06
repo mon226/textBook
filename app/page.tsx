@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Footer from './components/footer';
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0);
+  const [buttonDimensions, setButtonDimensions] = useState<{width: number, height: number}[]>([]);
+  const buttonRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const subjects = [
     { 
@@ -49,6 +51,47 @@ export default function Home() {
       colorCode: '#eeb537'
     },
   ];
+
+  // SVGパスを生成する関数
+  const generateSVGPaths = (width: number, height: number) => {
+    // 固定値を使用（提案された値）
+    const semicircleX = 17.5; // 左右の位置（100分率）
+    const semicircleRadiusX = 12.5; // 横方向の半径
+    const lineStart = 15; // 線の開始位置（半円より内側）
+    const lineEnd = 85; // 線の終了位置
+    
+    return {
+      leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
+      rightSemicircle: `M ${100 - semicircleX} 100 A ${semicircleRadiusX} 50 0 0 0 ${100 - semicircleX} 0`,
+      topLine: { x1: lineEnd, y1: 0, x2: lineStart, y2: 0 },
+      bottomLine: { x1: lineStart, y1: 100, x2: lineEnd, y2: 100 }
+    };
+  };
+
+  // ボタンのサイズを測定
+  useEffect(() => {
+    const measureButtons = () => {
+      const dimensions = buttonRefs.current.map(ref => {
+        if (ref) {
+          const rect = ref.getBoundingClientRect();
+          return { width: rect.width, height: rect.height };
+        }
+        return { width: 200, height: 40 }; // デフォルト値
+      });
+      setButtonDimensions(dimensions);
+    };
+
+    measureButtons();
+    window.addEventListener('resize', measureButtons);
+    
+    // 初回測定のタイミングを遅らせる
+    const timer = setTimeout(measureButtons, 100);
+    
+    return () => {
+      window.removeEventListener('resize', measureButtons);
+      clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     let animationId: number;
@@ -149,62 +192,72 @@ export default function Home() {
                   </div>
                   <p className="text-primary mb-[4vw]" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{subject.description}</p>
                   <Link 
+                    ref={(el) => { buttonRefs.current[index] = el; }}
                     href={subject.href}
                     className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative view-more-btn`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
                     data-color={subject.color}
                   >
-                    <svg 
-                      className="absolute inset-0 pointer-events-none" 
-                      style={{ width: 'calc(100% + 2.8vw)', height: 'calc(100% + 0.8vw)', left: '-1.4vw', top: '-0.4vw' }}
-                      viewBox="0 0 100 100"
-                      preserveAspectRatio="none"
-                    >
-                      {/* Left semicircle */}
-                      <path 
-                        d="M 10 0 A 5 50 0 0 0 10 100"
-                        fill="none" 
-                        stroke={subject.colorCode} 
-                        strokeWidth="0.4" 
-                        strokeDasharray="4.8 1.6"
-                        className="view-more-border"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                      {/* Right semicircle */}
-                      <path 
-                        d="M 90 100 A 5 50 0 0 0 90 0"
-                        fill="none" 
-                        stroke={subject.colorCode} 
-                        strokeWidth="0.4" 
-                        strokeDasharray="4.8 1.6"
-                        className="view-more-border"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                      {/* Top line */}
-                      <line 
-                        x1="90" 
-                        y1="0" 
-                        x2="10" 
-                        y2="0" 
-                        stroke={subject.colorCode} 
-                        strokeWidth="0.6" 
-                        strokeDasharray="4.8 1.6"
-                        className="view-more-border"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                      {/* Bottom line */}
-                      <line 
-                        x1="10" 
-                        y1="100" 
-                        x2="90" 
-                        y2="100" 
-                        stroke={subject.colorCode} 
-                        strokeWidth="0.6" 
-                        strokeDasharray="4.8 1.6"
-                        className="view-more-border"
-                        vectorEffect="non-scaling-stroke"
-                      />
-                    </svg>
+                    {buttonDimensions[index] && (
+                      <svg 
+                        className="absolute inset-0 pointer-events-none" 
+                        style={{ width: 'calc(100% + 2.8vw)', height: 'calc(100% + 0.8vw)', left: '-1.4vw', top: '-0.4vw' }}
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                      >
+                        {(() => {
+                          const paths = generateSVGPaths(buttonDimensions[index].width, buttonDimensions[index].height);
+                          return (
+                            <>
+                              {/* Left semicircle */}
+                              <path 
+                                d={paths.leftSemicircle}
+                                fill="none" 
+                                stroke={subject.colorCode} 
+                                strokeWidth="0.4" 
+                                strokeDasharray="4.8 1.6"
+                                className="view-more-border"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                              {/* Right semicircle */}
+                              <path 
+                                d={paths.rightSemicircle}
+                                fill="none" 
+                                stroke={subject.colorCode} 
+                                strokeWidth="0.4" 
+                                strokeDasharray="4.8 1.6"
+                                className="view-more-border"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                              {/* Top line */}
+                              <line 
+                                x1={paths.topLine.x1}
+                                y1={paths.topLine.y1}
+                                x2={paths.topLine.x2}
+                                y2={paths.topLine.y2}
+                                stroke={subject.colorCode} 
+                                strokeWidth="0.6" 
+                                strokeDasharray="4.8 1.6"
+                                className="view-more-border"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                              {/* Bottom line */}
+                              <line 
+                                x1={paths.bottomLine.x1}
+                                y1={paths.bottomLine.y1}
+                                x2={paths.bottomLine.x2}
+                                y2={paths.bottomLine.y2}
+                                stroke={subject.colorCode} 
+                                strokeWidth="0.6" 
+                                strokeDasharray="4.8 1.6"
+                                className="view-more-border"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                            </>
+                          );
+                        })()}
+                      </svg>
+                    )}
                     <span>view more!</span>
                     <span className="absolute right-[2vw]">→</span>
                   </Link>
