@@ -254,15 +254,23 @@ export default function Home() {
                   <Link 
                     ref={(el) => { buttonRefs.current[index] = el; }}
                     href={subject.href}
-                    className={`inline-flex items-center px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full font-medium transition-all duration-300 hover:opacity-90 relative view-more-btn`}
+                    className={`inline-flex items-center px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full font-medium transition-all duration-300 relative view-more-btn group`}
                     style={{ 
-                      fontSize: 'clamp(0.875rem, 2vw, 1rem)', 
+                      fontSize: 'clamp(0.875rem, 2vw, 1.125rem)', 
                       minWidth: '200px',
                       backgroundColor: mixWithWhite(subject.colorCode, 0.85),
                       border: `2px solid ${mixWithWhite(subject.colorCode, 0.3)}`,
                       color: subject.colorCode
                     }}
                     data-color={subject.color}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = subject.colorCode;
+                      e.currentTarget.style.color = mixWithWhite(subject.colorCode, 0.85);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = mixWithWhite(subject.colorCode, 0.85);
+                      e.currentTarget.style.color = subject.colorCode;
+                    }}
                   >
                     {buttonDimensions[index] && (
                       <svg 
