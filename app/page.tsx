@@ -36,6 +36,13 @@ export default function Home() {
       cardColor: 'subject-card-english',
       description: '英語の基礎から応用まで学習できます',
       colorCode: '#c3443b',
+      subItems: [
+        { name: '英単語', href: '/english/vocabulary' },
+        { name: '英文法', href: '/english/grammar' },
+        { name: '長文読解', href: '/english/reading' },
+        { name: 'リスニング', href: '/english/listening' },
+        { name: '速読', href: '/english/speed-reading' }
+      ]
     },
     { 
       name: '数学', 
@@ -44,6 +51,12 @@ export default function Home() {
       cardColor: 'subject-card-math',
       description: '数学の問題演習と解説を提供します',
       colorCode: '#0080b8',
+      subItems: [
+        { name: '勉強の進め方〜数学編〜', href: '/math/study-guide' },
+        { name: '数学参考書一覧', href: '/math/reference-books' },
+        { name: '講師陣の使用していた参考書', href: '/math/teacher-books' },
+        { name: '共通テストと数学', href: '/math/common-test' }
+      ]
     },
     { 
       name: '国語', 
@@ -52,6 +65,9 @@ export default function Home() {
       cardColor: 'subject-card-japanese',
       description: '読解力と表現力を養います',
       colorCode: '#003c92',
+      subItems: [
+        { name: '現代文なんでも相談室', href: '/japanese/consultation' }
+      ]
     },
     { 
       name: '理科', 
@@ -60,6 +76,10 @@ export default function Home() {
       cardColor: 'subject-card-science',
       description: '物理・化学・生物を総合的に学習',
       colorCode: '#56a533',
+      subItems: [
+        { name: '勉強の進め方〜理科編〜', href: '/science/study-guide' },
+        { name: '理科の参考書', href: '/science/reference-books' }
+      ]
     },
     { 
       name: '社会', 
@@ -68,6 +88,9 @@ export default function Home() {
       cardColor: 'subject-card-social',
       description: '歴史・地理・公民を体系的に理解',
       colorCode: '#eeb537',
+      subItems: [
+        { name: '社会のお悩み解決特集', href: '/social/qa' }
+      ]
     },
   ];
 
@@ -348,8 +371,23 @@ export default function Home() {
                   </div>
                 </div>
                 {/* 下部70% */}
-                <div className="h-[70%]">
-                  {/* ここに今後コンテンツを追加 */}
+                <div className="h-[70%] flex flex-col">
+                  {subject.subItems.map((item, itemIndex) => (
+                    <Link
+                      key={itemIndex}
+                      href={item.href}
+                      className="w-full h-[15%] flex items-center px-[4vw] font-medium transition-all duration-300 hover:opacity-80"
+                      style={{
+                        backgroundColor: mixWithWhite(subject.colorCode, 0.85),
+                        border: `2px solid ${subject.colorCode}`,
+                        borderTop: itemIndex === 0 ? `2px solid ${subject.colorCode}` : 'none',
+                        color: subject.colorCode,
+                        fontSize: 'clamp(0.875rem, 2vw, 1rem)'
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
