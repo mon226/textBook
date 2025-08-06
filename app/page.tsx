@@ -52,26 +52,61 @@ export default function Home() {
     },
   ];
 
-  // SVGパスを生成する関数
+  // SVGパスを生成する関数（数学的定義に基づく）
   const generateSVGPaths = (width: number, height: number) => {
-    // アスペクト比を計算（横長なほど値が大きい）
-    const aspectRatio = width / height;
-    const isMobile = width < 150; // おおよそのモバイルボタンの幅
+    // ボタンの寸法（実際のピクセル値）
+    const w = width;
+    const h = height;
+    const r = h / 2; // ボタンのradius
     
-    // 横長のボタンの場合、直線を内側に寄せる（より長く見せる）
-    const lineAdjustment = aspectRatio > 4 ? 5 : 0; // アスペクト比が4以上なら調整
+    // ボタンと点線の距離（ピクセル）
+    const d = h * 0.15; // 高さの15%（調整可能）
     
-    // モバイルとPCで微調整
-    const semicircleX = 17.5 - lineAdjustment; // 半円も内側に移動
-    const semicircleRadiusX = 12.5;
-    const lineStart = 15 - lineAdjustment; // 横長の場合、より内側から開始
-    const lineEnd = 85 + lineAdjustment; // 横長の場合、より外側まで延長
+    // SVGの全体サイズ
+    const svgWidth = w + 2 * (r + d);
+    const svgHeight = h + 2 * d;
+    
+    // SVGの中心を(0,0)として計算し、その後viewBoxに合わせて変換
+    // viewBoxは0-100なので、変換係数を計算
+    const scaleX = 100 / svgWidth;
+    const scaleY = 100 / svgHeight;
+    const offsetX = 50; // viewBoxの中心
+    const offsetY = 50;
+    
+    // 実座標からviewBox座標への変換関数
+    const toViewBoxX = (x: number) => x * scaleX + offsetX;
+    const toViewBoxY = (y: number) => y * scaleY + offsetY;
+    
+    // 半円の中心座標
+    const leftSemicircleX = -(w - h) / 2;
+    const rightSemicircleX = (w - h) / 2;
+    const semicircleRadius = r + d;
+    
+    // 直線のy座標と長さ
+    const lineY = d + r;
+    const lineLength = w - h;
+    const lineStartX = leftSemicircleX;
+    const lineEndX = rightSemicircleX;
+    
+    // viewBox座標に変換
+    const viewBoxRadius = semicircleRadius * scaleX; // 楕円の場合は異なるスケールが必要
+    const viewBoxRadiusY = semicircleRadius * scaleY;
     
     return {
-      leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
-      rightSemicircle: `M ${100 - semicircleX} 100 A ${semicircleRadiusX} 50 0 0 0 ${100 - semicircleX} 0`,
-      topLine: { x1: lineEnd, y1: 0, x2: lineStart, y2: 0 },
-      bottomLine: { x1: lineStart, y1: 100, x2: lineEnd, y2: 100 }
+      leftSemicircle: `M ${toViewBoxX(leftSemicircleX)} ${toViewBoxY(-lineY)} A ${viewBoxRadius} ${viewBoxRadiusY} 0 0 0 ${toViewBoxX(leftSemicircleX)} ${toViewBoxY(lineY)}`,
+      rightSemicircle: `M ${toViewBoxX(rightSemicircleX)} ${toViewBoxY(lineY)} A ${viewBoxRadius} ${viewBoxRadiusY} 0 0 0 ${toViewBoxX(rightSemicircleX)} ${toViewBoxY(-lineY)}`,
+      topLine: { 
+        x1: toViewBoxX(lineEndX), 
+        y1: toViewBoxY(-lineY), 
+        x2: toViewBoxX(lineStartX), 
+        y2: toViewBoxY(-lineY) 
+      },
+      bottomLine: { 
+        x1: toViewBoxX(lineStartX), 
+        y1: toViewBoxY(lineY), 
+        x2: toViewBoxX(lineEndX), 
+        y2: toViewBoxY(lineY) 
+      }
     };
   };
 
@@ -208,7 +243,12 @@ export default function Home() {
                     {buttonDimensions[index] && (
                       <svg 
                         className="absolute inset-0 pointer-events-none" 
-                        style={{ width: 'calc(100% + 2.8vw)', height: 'calc(100% + 0.8vw)', left: '-1.4vw', top: '-0.4vw' }}
+                        style={{ 
+                          width: `calc(100% + ${buttonDimensions[index].height * 1.3}px)`,
+                          height: `calc(100% + ${buttonDimensions[index].height * 0.3}px)`,
+                          left: `-${buttonDimensions[index].height * 0.65}px`,
+                          top: `-${buttonDimensions[index].height * 0.15}px`
+                        }}
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
                       >
