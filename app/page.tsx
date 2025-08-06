@@ -54,11 +54,18 @@ export default function Home() {
 
   // SVGパスを生成する関数
   const generateSVGPaths = (width: number, height: number) => {
-    // 固定値を使用（提案された値）
-    const semicircleX = 17.5; // 左右の位置（100分率）
-    const semicircleRadiusX = 12.5; // 横方向の半径
-    const lineStart = 15; // 線の開始位置（半円より内側）
-    const lineEnd = 85; // 線の終了位置
+    // アスペクト比を計算（横長なほど値が大きい）
+    const aspectRatio = width / height;
+    const isMobile = width < 150; // おおよそのモバイルボタンの幅
+    
+    // 横長のボタンの場合、直線を内側に寄せる（より長く見せる）
+    const lineAdjustment = aspectRatio > 4 ? 5 : 0; // アスペクト比が4以上なら調整
+    
+    // モバイルとPCで微調整
+    const semicircleX = 17.5;
+    const semicircleRadiusX = 12.5;
+    const lineStart = 15 - lineAdjustment; // 横長の場合、より内側から開始
+    const lineEnd = 85 + lineAdjustment; // 横長の場合、より外側まで延長
     
     return {
       leftSemicircle: `M ${semicircleX} 0 A ${semicircleRadiusX} 50 0 0 0 ${semicircleX} 100`,
