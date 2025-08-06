@@ -9,6 +9,24 @@ export default function Home() {
   const [buttonDimensions, setButtonDimensions] = useState<{width: number, height: number}[]>([]);
   const buttonRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
+  // 色を白と混ぜる関数
+  const mixWithWhite = (color: string, whiteRatio: number) => {
+    // HEXカラーをRGBに変換
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    
+    // 白（255, 255, 255）と混ぜる
+    const mixedR = Math.round(r + (255 - r) * whiteRatio);
+    const mixedG = Math.round(g + (255 - g) * whiteRatio);
+    const mixedB = Math.round(b + (255 - b) * whiteRatio);
+    
+    // RGBをHEXに戻す
+    const toHex = (n: number) => n.toString(16).padStart(2, '0');
+    return `#${toHex(mixedR)}${toHex(mixedG)}${toHex(mixedB)}`;
+  };
+
   const subjects = [
     { 
       name: '英語', 
@@ -240,8 +258,8 @@ export default function Home() {
                     style={{ 
                       fontSize: 'clamp(0.875rem, 2vw, 1rem)', 
                       minWidth: '200px',
-                      backgroundColor: `${subject.colorCode}20`,
-                      border: `2px solid ${subject.colorCode}80`,
+                      backgroundColor: mixWithWhite(subject.colorCode, 0.85),
+                      border: `2px solid ${mixWithWhite(subject.colorCode, 0.3)}`,
                       color: subject.colorCode
                     }}
                     data-color={subject.color}
