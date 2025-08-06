@@ -13,35 +13,40 @@ export default function Home() {
       href: '/english', 
       color: 'subject-english',
       cardColor: 'subject-card-english',
-      description: '英語の基礎から応用まで学習できます'
+      description: '英語の基礎から応用まで学習できます',
+      colorCode: '#c3443b'
     },
     { 
       name: '数学', 
       href: '/math', 
       color: 'subject-math',
       cardColor: 'subject-card-math',
-      description: '数学の問題演習と解説を提供します'
+      description: '数学の問題演習と解説を提供します',
+      colorCode: '#0080b8'
     },
     { 
       name: '国語', 
       href: '/japanese', 
       color: 'subject-japanese',
       cardColor: 'subject-card-japanese',
-      description: '読解力と表現力を養います'
+      description: '読解力と表現力を養います',
+      colorCode: '#003c92'
     },
     { 
       name: '理科', 
       href: '/science', 
       color: 'subject-physics',
       cardColor: 'subject-card-science',
-      description: '物理・化学・生物を総合的に学習'
+      description: '物理・化学・生物を総合的に学習',
+      colorCode: '#56a533'
     },
     { 
       name: '社会', 
       href: '/social', 
       color: 'subject-history-jp',
       cardColor: 'subject-card-social',
-      description: '歴史・地理・公民を体系的に理解'
+      description: '歴史・地理・公民を体系的に理解',
+      colorCode: '#eeb537'
     },
   ];
 
@@ -147,16 +152,17 @@ export default function Home() {
                     href={subject.href}
                     className={`inline-flex items-center ${subject.color} px-[6vw] py-[2vw] sm:py-[1.5vw] rounded-full text-secondary font-medium transition-all duration-300 hover:opacity-80 relative view-more-btn`}
                     style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)', minWidth: '200px' }}
+                    data-color={subject.color}
                   >
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ width: 'calc(100% + 0.8vw)', height: 'calc(100% + 0.8vw)', left: '-0.4vw', top: '-0.4vw' }}>
                       <rect 
-                        x="0.05vw" 
-                        y="0.05vw" 
-                        width="calc(100% - 0.1vw)" 
-                        height="calc(100% - 0.1vw)" 
-                        rx="50%" 
+                        x="0" 
+                        y="0" 
+                        width="100%" 
+                        height="100%" 
+                        rx="9999" 
                         fill="none" 
-                        stroke="currentColor" 
+                        stroke={subject.colorCode} 
                         strokeWidth="0.1vw" 
                         strokeDasharray="1.2vw 0.4vw"
                         className="view-more-border"
