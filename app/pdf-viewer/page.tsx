@@ -2,62 +2,86 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import Footer from '../components/footer';
 
 export default function PDFViewerPage() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0); // 0ページ（表紙）から開始
+  const [inputPage, setInputPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const totalPages = 52;
+  const [showPageInput, setShowPageInput] = useState(false);
+  const totalPages = 52; // 実際のページ数（画像は1-52）
+  const maxDisplayPage = 51; // 表示上の最大ページ（0-51）
 
   // ページ番号をフォーマット（webpファイル用）
   const formatPageNumber = (num: number) => {
     return num.toString();
   };
 
-  // 現在表示すべきページを取得
+  // 現在表示すべきページを取得（0ベースから1ベースの画像番号に変換）
   const getDisplayPages = () => {
-    if (currentPage === 1) {
-      // 表紙は単体表示
+    if (currentPage === 0) {
+      // 表紙は単体表示（画像番号1）
       return [1];
-    } else if (currentPage === totalPages) {
-      // 裏表紙は単体表示
-      return [totalPages];
+    } else if (currentPage === maxDisplayPage) {
+      // 裏表紙は単体表示（画像番号52）
+      return [52];
     } else {
-      // 見開き表示（偶数ページとその次のページ）
-      const leftPage = currentPage % 2 === 0 ? currentPage : currentPage - 1;
-      const rightPage = leftPage + 1;
-      
-      // 最終ページを超えないようにチェック
-      if (rightPage > totalPages) {
-        return [leftPage];
-      }
-      return [leftPage, rightPage];
+      // 見開き表示（currentPageは奇数、画像は+1した偶数と奇数のペア）
+      const leftImageNum = currentPage + 1;  // 左ページの画像番号
+      const rightImageNum = currentPage + 2; // 右ページの画像番号
+      return [leftImageNum, rightImageNum];
     }
   };
 
-  // ページ送り
+  // ページ送り（基本的に+2、ただし0→1、50→51は+1）
   const nextPage = useCallback(() => {
-    if (currentPage === 1) {
-      setCurrentPage(2);
-    } else if (currentPage === totalPages) {
-      return;
-    } else {
-      const nextPageNum = currentPage % 2 === 0 ? currentPage + 2 : currentPage + 1;
-      setCurrentPage(Math.min(nextPageNum, totalPages));
-    }
-  }, [currentPage, totalPages]);
-
-  // ページ戻し
-  const prevPage = useCallback(() => {
-    if (currentPage === 1) {
-      return;
-    } else if (currentPage === 2 || currentPage === 3) {
+    if (currentPage === 0) {
       setCurrentPage(1);
+      setInputPage(1);
+    } else if (currentPage >= maxDisplayPage - 1) {
+      setCurrentPage(maxDisplayPage);
+      setInputPage(maxDisplayPage);
     } else {
-      const prevPageNum = currentPage % 2 === 0 ? currentPage - 2 : currentPage - 1;
-      setCurrentPage(Math.max(prevPageNum, 1));
+      setCurrentPage(currentPage + 2);
+      setInputPage(currentPage + 2);
     }
-  }, [currentPage]);
+  }, [currentPage, maxDisplayPage]);
+
+  // ページ戻し（基本的に-2、ただし1→0、51→49は特殊）
+  const prevPage = useCallback(() => {
+    if (currentPage === 0) {
+      return;
+    } else if (currentPage === 1) {
+      setCurrentPage(0);
+      setInputPage(0);
+    } else if (currentPage === maxDisplayPage) {
+      setCurrentPage(maxDisplayPage - 2);
+      setInputPage(maxDisplayPage - 2);
+    } else {
+      setCurrentPage(currentPage - 2);
+      setInputPage(currentPage - 2);
+    }
+  }, [currentPage, maxDisplayPage]);
+  
+  // ユーザー入力の処理（偶数は奇数に変換）
+  const handlePageInput = (value: number) => {
+    if (value < 0) {
+      setCurrentPage(0);
+      setInputPage(0);
+    } else if (value > maxDisplayPage) {
+      setCurrentPage(maxDisplayPage);
+      setInputPage(maxDisplayPage);
+    } else if (value === 0 || value === maxDisplayPage) {
+      setCurrentPage(value);
+      setInputPage(value);
+    } else if (value % 2 === 0) {
+      // 偶数入力は-1して奇数に
+      setCurrentPage(value - 1);
+      setInputPage(value - 1);
+    } else {
+      setCurrentPage(value);
+      setInputPage(value);
+    }
+  };
 
   // キーボード操作
   useEffect(() => {
@@ -121,8 +145,7 @@ export default function PDFViewerPage() {
   const displayPages = getDisplayPages();
 
   return (
-    <>
-      <div className="h-screen bg-gradient-main relative overflow-hidden">
+    <div className="h-screen bg-gradient-main relative overflow-hidden">
         {/* PC版の境界線 */}
         <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[960px] -translate-x-1/2 pointer-events-none">
           <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
@@ -130,42 +153,16 @@ export default function PDFViewerPage() {
         </div>
         
         {/* メインコンテンツ */}
-        <div className="h-full flex flex-col">
+        <div className="h-full">
           <div className="container-wrapper h-full">
             <div 
-              className="h-full w-full md:max-w-[960px] md:mx-auto flex flex-col"
+              className="h-full w-full md:max-w-[960px] md:mx-auto relative"
               style={{
                 background: 'linear-gradient(135deg, #fbdfe1 0%, #cc8699 100%)'
               }}
             >
-              {/* ヘッダー部分 */}
-              <div className="px-[3vw] py-[2vw] md:px-6 md:py-3 border-b-2 border-[#b28247]/30 flex items-center justify-between">
-                <h1 className="text-center font-bold text-[#731a3d] flex-1" style={{ fontSize: 'clamp(1.25rem, 3vw, 1.75rem)' }}>
-                  二子玉川参考書紹介 &apos;25
-                </h1>
-                
-                {/* ページ番号表示 */}
-                <div className="flex items-center gap-2 text-[#731a3d]">
-                  <input 
-                    type="number" 
-                    min="1" 
-                    max={totalPages}
-                    value={currentPage}
-                    onChange={(e) => {
-                      const page = parseInt(e.target.value);
-                      if (page >= 1 && page <= totalPages) {
-                        setCurrentPage(page);
-                      }
-                    }}
-                    className="w-12 text-center border border-[#b28247]/30 rounded px-1 bg-white/50"
-                    style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
-                  />
-                  <span style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>/ {totalPages}</span>
-                </div>
-              </div>
-              
               {/* PDF表示エリア */}
-              <div id="pdf-content" className="flex-1 relative overflow-hidden bg-white/10">
+              <div id="pdf-content" className="h-full relative overflow-hidden bg-white/10">
                 {/* 左側のクリックエリア */}
                 <div 
                   className="absolute left-0 top-0 bottom-0 w-[20%] md:w-[15%] z-10 cursor-pointer hover:bg-black/5 active:bg-black/10 transition-colors"
@@ -201,7 +198,7 @@ export default function PDFViewerPage() {
                           className="object-contain pointer-events-none"
                           onLoadingComplete={() => setIsLoading(false)}
                           onLoadStart={() => setIsLoading(true)}
-                          priority={pageNum === 1}
+                          priority={currentPage === 0 && pageNum === 1}
                           quality={95}
                           draggable={false}
                         />
@@ -213,39 +210,96 @@ export default function PDFViewerPage() {
                 </div>
               </div>
               
-              {/* フッター部分 */}
-              <div className="px-[3vw] py-[2vw] md:px-6 md:py-3 border-t-2 border-[#b28247]/30 flex items-center justify-between">
-                <button 
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
-                  style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+              {/* スライドインフッター（トップページと同じ仕様） */}
+              <div className="absolute bottom-0 left-0 right-0 transform translate-y-[calc(100%-3rem)] hover:translate-y-0 transition-transform duration-300 bg-white/90 backdrop-blur-sm border-t-2 border-[#b28247]/30 z-30">
+                <div 
+                  className="h-[3rem] flex items-center justify-center px-4 cursor-pointer"
+                  onClick={() => setShowPageInput(!showPageInput)}
                 >
-                  ← 前へ
-                </button>
-                
-                <div className="text-[#731a3d] text-center" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
-                  {displayPages.length === 1 
-                    ? `${currentPage}ページ` 
-                    : `${displayPages[0]}-${displayPages[1]}ページ`
-                  }
+                  {showPageInput ? (
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="number" 
+                        min="0" 
+                        max={maxDisplayPage}
+                        value={inputPage}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          setInputPage(value);
+                        }}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (!isNaN(value)) {
+                            handlePageInput(value);
+                          }
+                          setShowPageInput(false);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            const value = parseInt(e.currentTarget.value);
+                            if (!isNaN(value)) {
+                              handlePageInput(value);
+                            }
+                            setShowPageInput(false);
+                          } else if (e.key === 'Escape') {
+                            setShowPageInput(false);
+                            setInputPage(currentPage);
+                          }
+                        }}
+                        className="w-16 text-center border border-[#b28247]/30 rounded px-2 py-1 bg-white/50 text-[#731a3d]"
+                        style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                        autoFocus
+                      />
+                      <span className="text-[#731a3d]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                        / {maxDisplayPage}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="text-[#731a3d] text-center" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                      ページ {currentPage === 0 || currentPage === maxDisplayPage
+                        ? currentPage
+                        : `${currentPage}-${currentPage + 1}`
+                      } / {maxDisplayPage}
+                    </div>
+                  )}
                 </div>
                 
-                <button 
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
-                  style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
-                >
-                  次へ →
-                </button>
+                {/* 展開時のコンテンツ */}
+                <div className="px-[3vw] py-[2vw] md:px-6 md:py-3 border-t border-[#b28247]/20">
+                  {/* ページナビゲーション */}
+                  <div className="flex items-center justify-between mb-4">
+                    <button 
+                      onClick={prevPage}
+                      disabled={currentPage === 0}
+                      className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
+                      style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                    >
+                      ← 前へ
+                    </button>
+                    
+                    <button 
+                      onClick={nextPage}
+                      disabled={currentPage === maxDisplayPage}
+                      className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
+                      style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                    >
+                      次へ →
+                    </button>
+                  </div>
+                  
+                  {/* ページ説明 */}
+                  <div className="text-center text-[#731a3d] text-sm">
+                    {currentPage === 0 && "表紙"}
+                    {currentPage === maxDisplayPage && "裏表紙"}
+                    {currentPage !== 0 && currentPage !== maxDisplayPage && 
+                      `${currentPage}-${currentPage + 1}ページ（見開き）`
+                    }
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <Footer />
-    </>
   );
 }
