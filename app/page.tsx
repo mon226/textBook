@@ -269,7 +269,7 @@ export default function Home() {
             }}
           >
             <div className="container-wrapper w-full">
-              <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto`}>
+              <div className={`subject-card ${subject.cardColor} w-full sm:w-full md:max-w-[960px] md:mx-auto h-full`}>
                 {/* 上部30% */}
                 <div className="h-[30%] px-[clamp(2rem,5vw,3rem)] py-[clamp(2rem,5vw,3rem)]">
                   <div className="text-center h-full flex items-center justify-center">
@@ -372,30 +372,7 @@ export default function Home() {
                 </div>
                 {/* 下部70% */}
                 <div className="h-[70%] flex flex-col relative overflow-hidden">
-                  {/* 背景の雲パターン */}
-                  <div 
-                    className="absolute inset-0 opacity-10 pointer-events-none"
-                    style={{
-                      backgroundImage: `url(/cloud${(index % 4) + 1}.svg)`,
-                      backgroundSize: '120px auto',
-                      backgroundRepeat: 'repeat',
-                      filter: `invert(1) contrast(0.3)`,
-                      maskImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 100%)`
-                    }}
-                  />
-                  
-                  {subject.subItems.map((item, itemIndex) => {
-                    // 各アイテムごとに異なる雲と変形を適用
-                    const cloudIndex = ((index * subject.subItems.length + itemIndex) % 4) + 1;
-                    const transformIndex = (index + itemIndex) % 4;
-                    const transforms = [
-                      '', // 通常
-                      'scaleX(-1)', // 左右反転
-                      'scaleY(-1)', // 上下反転
-                      'scale(-1, -1)' // 左右上下反転
-                    ];
-                    
-                    return (
+                  {subject.subItems.map((item, itemIndex) => (
                     <Link
                       key={itemIndex}
                       href={item.href}
@@ -407,18 +384,6 @@ export default function Home() {
                         fontSize: 'clamp(0.875rem, 2vw, 1rem)'
                       }}
                     >
-                      {/* 個別の雲パターン背景 */}
-                      <div 
-                        className="absolute inset-0 opacity-8 pointer-events-none"
-                        style={{
-                          backgroundImage: `url(/cloud${cloudIndex}.svg)`,
-                          backgroundSize: '100px auto',
-                          backgroundRepeat: 'repeat',
-                          backgroundPosition: `${itemIndex * 20}px ${itemIndex * 10}px`,
-                          transform: transforms[transformIndex],
-                          filter: `invert(1) contrast(0.2)`,
-                        }}
-                      />
                       
                       {/* ホバー時の背景効果 */}
                       <div 
@@ -449,9 +414,7 @@ export default function Home() {
                         style={{ backgroundColor: subject.colorCode }}
                       />
                     </Link>
-                    );
-                  })}
-                  
+                  ))}
                   {/* 残りのスペースを埋める */}
                   {subject.subItems.length < 6 && (
                     <div 
