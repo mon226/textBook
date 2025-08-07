@@ -371,23 +371,97 @@ export default function Home() {
                   </div>
                 </div>
                 {/* 下部70% */}
-                <div className="h-[70%] flex flex-col">
-                  {subject.subItems.map((item, itemIndex) => (
+                <div className="h-[70%] flex flex-col relative overflow-hidden">
+                  {/* 背景の雲パターン */}
+                  <div 
+                    className="absolute inset-0 opacity-10 pointer-events-none"
+                    style={{
+                      backgroundImage: `url(/cloud${(index % 4) + 1}.svg)`,
+                      backgroundSize: '120px auto',
+                      backgroundRepeat: 'repeat',
+                      filter: `invert(1) contrast(0.3)`,
+                      maskImage: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.05) 100%)`
+                    }}
+                  />
+                  
+                  {subject.subItems.map((item, itemIndex) => {
+                    // 各アイテムごとに異なる雲と変形を適用
+                    const cloudIndex = ((index * subject.subItems.length + itemIndex) % 4) + 1;
+                    const transformIndex = (index + itemIndex) % 4;
+                    const transforms = [
+                      '', // 通常
+                      'scaleX(-1)', // 左右反転
+                      'scaleY(-1)', // 上下反転
+                      'scale(-1, -1)' // 左右上下反転
+                    ];
+                    
+                    return (
                     <Link
                       key={itemIndex}
                       href={item.href}
-                      className="w-full h-[15%] flex items-center px-[4vw] font-medium transition-all duration-300 hover:opacity-80"
+                      className="w-full h-[15%] flex items-center px-[5vw] font-medium transition-all duration-300 relative group overflow-hidden"
                       style={{
-                        backgroundColor: mixWithWhite(subject.colorCode, 0.85),
-                        border: `2px solid ${subject.colorCode}`,
-                        borderTop: itemIndex === 0 ? `2px solid ${subject.colorCode}` : 'none',
+                        backgroundColor: mixWithWhite(subject.colorCode, 0.93),
+                        borderBottom: `1px solid ${mixWithWhite(subject.colorCode, 0.7)}`,
                         color: subject.colorCode,
                         fontSize: 'clamp(0.875rem, 2vw, 1rem)'
                       }}
                     >
-                      {item.name}
+                      {/* 個別の雲パターン背景 */}
+                      <div 
+                        className="absolute inset-0 opacity-8 pointer-events-none"
+                        style={{
+                          backgroundImage: `url(/cloud${cloudIndex}.svg)`,
+                          backgroundSize: '100px auto',
+                          backgroundRepeat: 'repeat',
+                          backgroundPosition: `${itemIndex * 20}px ${itemIndex * 10}px`,
+                          transform: transforms[transformIndex],
+                          filter: `invert(1) contrast(0.2)`,
+                        }}
+                      />
+                      
+                      {/* ホバー時の背景効果 */}
+                      <div 
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          background: `linear-gradient(90deg, ${mixWithWhite(subject.colorCode, 0.85)} 0%, transparent 100%)`
+                        }}
+                      />
+                      
+                      {/* アイコン */}
+                      <span 
+                        className="mr-[2vw] opacity-60 relative z-10 transition-transform duration-300 group-hover:translate-x-[0.5vw] flex items-center"
+                        style={{ 
+                          color: subject.colorCode,
+                          fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+                          lineHeight: 1
+                        }}
+                      >
+                        ▸
+                      </span>
+                      
+                      {/* テキスト */}
+                      <span className="relative z-10 flex-1 transition-transform duration-300 group-hover:translate-x-[1vw] flex items-center">{item.name}</span>
+                      
+                      {/* 右側の装飾線 */}
+                      <div 
+                        className="absolute right-0 top-[20%] bottom-[20%] w-[0.3vw] opacity-0 group-hover:opacity-40 transition-opacity duration-300"
+                        style={{ backgroundColor: subject.colorCode }}
+                      />
                     </Link>
-                  ))}
+                    );
+                  })}
+                  
+                  {/* 残りのスペースを埋める */}
+                  {subject.subItems.length < 6 && (
+                    <div 
+                      className="flex-1"
+                      style={{
+                        backgroundColor: mixWithWhite(subject.colorCode, 0.97),
+                        borderTop: `1px solid ${mixWithWhite(subject.colorCode, 0.7)}`
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </div>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>和風雲ランダム生成 v2</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .controls {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .control-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: inline-block;
+      width: 200px;
+      font-weight: bold;
+    }
+    
+    input[type="range"] {
+      width: 200px;
+    }
+    
+    .value {
+      display: inline-block;
+      width: 50px;
+      text-align: right;
+    }
+    
+    button {
+      background: #0080b8;
+      color: white;
+      border: none;
+      padding: 10px 30px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    button:hover {
+      background: #006090;
+    }
+    
+    .preview {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    #cloudSvg {
+      width: 100%;
+      height: auto;
+      border: 1px solid #eee;
+    }
+    
+    .code-output {
+      background: #f8f8f8;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    
+    .info {
+      background: #e8f4f8;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>和風雲ランダム生成ツール v2</h1>
+    
+    <div class="info">
+      <strong>和風雲の構造：</strong>
+      <ul>
+        <li>全体は一筆書きの連続パス</li>
+        <li>山層（奇数層）と谷層（偶数層）が交互に配置</li>
+        <li>各位置で山の幅をランダムに変更</li>
+        <li>半円を通るたびに進行方向が反転</li>
+      </ul>
+    </div>
+    
+    <div class="controls">
+      <div class="control-group">
+        <label>層の数（奇数のみ）:</label>
+        <input type="range" id="layers" min="3" max="9" step="2" value="3">
+        <span class="value" id="layersValue">3</span>
+      </div>
+      
+      <div class="control-group">
+        <label>横方向の山谷の数:</label>
+        <input type="range" id="segments" min="4" max="12" value="8">
+        <span class="value" id="segmentsValue">8</span>
+      </div>
+      
+      <div class="control-group">
+        <label>山の最小幅:</label>
+        <input type="range" id="minWidth" min="20" max="60" value="30">
+        <span class="value" id="minWidthValue">30</span>
+      </div>
+      
+      <div class="control-group">
+        <label>山の最大幅:</label>
+        <input type="range" id="maxWidth" min="60" max="150" value="80">
+        <span class="value" id="maxWidthValue">80</span>
+      </div>
+      
+      <div class="control-group">
+        <label>半円の半径:</label>
+        <input type="range" id="radius" min="10" max="25" value="15">
+        <span class="value" id="radiusValue">15</span>
+      </div>
+      
+      <button onclick="generateCloud()">新しい雲を生成</button>
+      <button onclick="downloadSVG()">SVGをダウンロード</button>
+    </div>
+    
+    <div class="preview">
+      <svg id="cloudSvg" viewBox="0 0 800 200">
+        <!-- 生成された雲がここに表示されます -->
+      </svg>
+    </div>
+    
+    <div class="code-output">
+      <h3>生成されたSVGコード:</h3>
+      <code id="svgCode"></code>
+    </div>
+  </div>
+
+  <script>
+    // スライダーの値を表示
+    document.querySelectorAll('input[type="range"]').forEach(input => {
+      input.addEventListener('input', (e) => {
+        document.getElementById(e.target.id + 'Value').textContent = e.target.value;
+      });
+    });
+
+    function generateCloud() {
+      const layers = parseInt(document.getElementById('layers').value);
+      const segments = parseInt(document.getElementById('segments').value);
+      const minWidth = parseInt(document.getElementById('minWidth').value);
+      const maxWidth = parseInt(document.getElementById('maxWidth').value);
+      const radius = parseFloat(document.getElementById('radius').value);
+      
+      // 各セグメントの幅をランダムに生成
+      const segmentWidths = [];
+      for (let i = 0; i < segments; i++) {
+        segmentWidths.push(minWidth + Math.random() * (maxWidth - minWidth));
+      }
+      
+      // SVGのサイズを計算
+      const totalWidth = segmentWidths.reduce((a, b) => a + b, 0) + radius * 4;
+      const totalHeight = (layers + 1) * radius * 2;
+      
+      // パスを生成
+      let path = '';
+      let currentX = radius * 2;
+      let currentY = radius * 2;
+      let direction = 1; // 1: 左から右, -1: 右から左
+      let currentLayer = 0;
+      let segmentIndex = 0;
+      
+      // 開始点
+      path = `M ${currentX} ${currentY}`;
+      
+      while (true) {
+        const isValley = currentLayer % 2 === 1;
+        const width = segmentWidths[segmentIndex % segments];
+        
+        if (!isValley) {
+          // 山層の処理
+          if (direction === 1) {
+            // 左半円（上向き）
+            path += ` A ${radius} ${radius} 0 0 0 ${currentX} ${currentY - radius}`;
+            // 上直線（左から右）
+            currentX += width;
+            path += ` L ${currentX} ${currentY - radius}`;
+            // 右半円（下向き）
+            path += ` A ${radius} ${radius} 0 0 0 ${currentX} ${currentY}`;
+          } else {
+            // 右半円（上向き）
+            path += ` A ${radius} ${radius} 0 0 1 ${currentX} ${currentY - radius}`;
+            // 上直線（右から左）
+            currentX -= width;
+            path += ` L ${currentX} ${currentY - radius}`;
+            // 左半円（下向き）
+            path += ` A ${radius} ${radius} 0 0 1 ${currentX} ${currentY}`;
+          }
+        } else {
+          // 谷層の処理
+          if (direction === 1) {
+            // 右半円（下向き）
+            path += ` A ${radius} ${radius} 0 0 1 ${currentX} ${currentY + radius * 2}`;
+            direction = -1; // 方向反転
+          } else {
+            // 左半円（下向き）
+            path += ` A ${radius} ${radius} 0 0 0 ${currentX} ${currentY + radius * 2}`;
+            direction = 1; // 方向反転
+          }
+          currentLayer++;
+          currentY += radius * 2;
+        }
+        
+        // 層の端での処理
+        if (!isValley) {
+          segmentIndex++;
+          
+          // 最下層に達したかチェック
+          if (currentLayer === layers - 1 && segmentIndex >= segments) {
+            // 最後の山を完成させて終了
+            break;
+          }
+          
+          // 層の端に到達したら折り返し
+          if ((direction === 1 && currentX >= totalWidth - radius * 2) || 
+              (direction === -1 && currentX <= radius * 2)) {
+            if (currentLayer < layers - 1) {
+              // 下の層へ移動
+              path += ` L ${currentX} ${currentY}`;
+              // 谷層を通って方向転換
+              if (direction === 1) {
+                path += ` A ${radius} ${radius} 0 0 1 ${currentX} ${currentY + radius * 2}`;
+                direction = -1;
+              } else {
+                path += ` A ${radius} ${radius} 0 0 0 ${currentX} ${currentY + radius * 2}`;
+                direction = 1;
+              }
+              currentLayer++;
+              currentY += radius * 2;
+            }
+          } else {
+            // 同じ層で続行
+            if (direction === 1) {
+              path += ` L ${currentX} ${currentY}`;
+            } else {
+              path += ` L ${currentX} ${currentY}`;
+            }
+          }
+        }
+      }
+      
+      // SVGを更新
+      const svg = document.getElementById('cloudSvg');
+      svg.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+      svg.innerHTML = `
+        <defs>
+          <style>
+            .cloud-path {
+              fill: none;
+              stroke: #231815;
+              stroke-width: 2;
+              stroke-miterlimit: 10;
+            }
+          </style>
+        </defs>
+        <path class="cloud-path" d="${path}" />
+      `;
+      
+      // コードを表示
+      document.getElementById('svgCode').textContent = svg.outerHTML;
+    }
+    
+    function downloadSVG() {
+      const svg = document.getElementById('cloudSvg');
+      const svgData = svg.outerHTML;
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'japanese-cloud.svg';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    // 初期生成
+    generateCloud();
+  </script>
+</body>
+</html>
