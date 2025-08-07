@@ -188,7 +188,7 @@ export default function PDFViewerPage() {
                           className="object-contain"
                           onLoadingComplete={() => setIsLoading(false)}
                           onLoadStart={() => setIsLoading(true)}
-                          priority
+                          priority={pageNum === 1}
                           quality={95}
                         />
                       </div>
