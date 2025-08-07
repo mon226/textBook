@@ -62,6 +62,17 @@ export default function PDFViewerPage() {
   // キーボード操作
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      // 本番環境（Vercel）でのみ開発者ツールを無効化
+      if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
+        if ((e.ctrlKey && e.shiftKey && e.key === 'I') || 
+            (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+            (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+            e.key === 'F12') {
+          e.preventDefault();
+          return;
+        }
+      }
+      
       if (e.key === 'ArrowRight') {
         nextPage();
       } else if (e.key === 'ArrowLeft') {
@@ -173,8 +184,10 @@ export default function PDFViewerPage() {
                     {displayPages.map((pageNum) => (
                       <div 
                         key={pageNum}
-                        className="relative h-full flex-1"
+                        className="relative h-full flex-1 select-none"
                         style={{ maxWidth: displayPages.length === 1 ? '50%' : '45%' }}
+                        onContextMenu={(e) => e.preventDefault()}
+                        onDragStart={(e) => e.preventDefault()}
                       >
                         {isLoading && (
                           <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-20">
@@ -185,12 +198,15 @@ export default function PDFViewerPage() {
                           src={`/img/pam/二子玉川参考書紹介'25${formatPageNumber(pageNum)}.webp`}
                           alt={`ページ ${pageNum}`}
                           fill
-                          className="object-contain"
+                          className="object-contain pointer-events-none"
                           onLoadingComplete={() => setIsLoading(false)}
                           onLoadStart={() => setIsLoading(true)}
                           priority={pageNum === 1}
                           quality={95}
+                          draggable={false}
                         />
+                        {/* 透明なオーバーレイで画像を保護 */}
+                        <div className="absolute inset-0 z-[1]" />
                       </div>
                     ))}
                   </div>
