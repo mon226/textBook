@@ -184,10 +184,7 @@ export default function PDFViewerPage() {
                         key={pageNum}
                         className="relative h-full flex-1 select-none"
                         style={{ 
-                          maxWidth: displayPages.length === 1 ? '31.8%' : '45%',
-                          // 単開きの場合、見開きの1ページ分の幅（45%）に対して、
-                          // A4の縦横比（1.414）を考慮して幅を調整
-                          // 45% × (1/1.414) ≈ 31.8%
+                          maxWidth: '45%'
                         }}
                         onContextMenu={(e) => e.preventDefault()}
                         onDragStart={(e) => e.preventDefault()}
