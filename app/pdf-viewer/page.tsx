@@ -9,9 +9,9 @@ export default function PDFViewerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const totalPages = 52;
 
-  // ページ番号を2桁にフォーマット
+  // ページ番号をフォーマット（webpファイル用）
   const formatPageNumber = (num: number) => {
-    return num.toString().padStart(2, '0');
+    return num.toString();
   };
 
   // 現在表示すべきページを取得
@@ -182,13 +182,14 @@ export default function PDFViewerPage() {
                           </div>
                         )}
                         <Image
-                          src={`/img/pam/二子玉川参考書紹介'25_ページ_${formatPageNumber(pageNum)}.png`}
+                          src={`/img/pam/二子玉川参考書紹介'25${formatPageNumber(pageNum)}.webp`}
                           alt={`ページ ${pageNum}`}
                           fill
                           className="object-contain"
                           onLoadingComplete={() => setIsLoading(false)}
                           onLoadStart={() => setIsLoading(true)}
                           priority
+                          quality={95}
                         />
                       </div>
                     ))}
