@@ -145,6 +145,53 @@ export default function PDFViewerPage() {
     }
   }, [nextPage, prevPage]);
 
+  // トラックパッド・マウスホイール操作用
+  useEffect(() => {
+    let isScrolling = false;
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleWheel = (e: WheelEvent) => {
+      // 垂直スクロールは無視（横スクロールのみ対応）
+      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+      
+      // 既にスクロール処理中の場合は無視
+      if (isScrolling) return;
+
+      e.preventDefault();
+
+      // 横スクロールの閾値を設定
+      const threshold = 30;
+      
+      if (Math.abs(e.deltaX) > threshold) {
+        isScrolling = true;
+
+        if (e.deltaX > 0) {
+          // 右スワイプ = 次のページ
+          nextPage();
+        } else {
+          // 左スワイプ = 前のページ
+          prevPage();
+        }
+
+        // 連続スクロールを防ぐためのクールダウン
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          isScrolling = false;
+        }, 300);
+      }
+    };
+
+    const contentEl = document.getElementById('pdf-content');
+    if (contentEl) {
+      contentEl.addEventListener('wheel', handleWheel, { passive: false });
+      
+      return () => {
+        contentEl.removeEventListener('wheel', handleWheel);
+        clearTimeout(scrollTimeout);
+      };
+    }
+  }, [nextPage, prevPage]);
+
   // 表示エリアの縦横比を判定して適切な扉画像を選択
   useEffect(() => {
     const checkAspectRatio = () => {
