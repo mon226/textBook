@@ -378,7 +378,7 @@ export default function Home() {
                     <Link
                       key={itemIndex}
                       href={item.href}
-                      className="w-full h-[15%] flex items-center px-[5vw] font-medium transition-all duration-300 relative group overflow-hidden"
+                      className="w-full h-[15%] flex items-center px-[5vw] font-medium transition-all duration-300 relative group overflow-visible"
                       style={{
                         backgroundColor: mixWithWhite(subject.colorCode, 0.93),
                         borderBottom: `1px solid ${mixWithWhite(subject.colorCode, 0.7)}`,
@@ -409,6 +409,45 @@ export default function Home() {
                       
                       {/* テキスト */}
                       <span className="relative z-10 flex-1 transition-transform duration-300 group-hover:translate-x-[1vw] flex items-center">{item.name}</span>
+                      
+                      {/* 下線と円をSVGで描画 */}
+                      <svg 
+                        className="absolute left-0 bottom-[20%] md:bottom-[15%] opacity-60"
+                        style={{ 
+                          width: 'clamp(10rem, 31.25vw, 18.75rem)', // 元の0.8倍 + 拡張分0.5倍 = 1.25倍の幅
+                          height: '8px',
+                          overflow: 'visible'
+                        }}
+                      >
+                        {/* 全体を右にスライド */}
+                        <g className="transition-transform duration-300 ease-out group-hover:translate-x-[40%]">
+                          {/* 追加の下線（最初は左側に隠れている） */}
+                          <line 
+                            x1="-40%" 
+                            y1="4" 
+                            x2="0" 
+                            y2="4" 
+                            stroke={subject.colorCode} 
+                            strokeWidth="2"
+                          />
+                          {/* 元の下線 */}
+                          <line 
+                            x1="0" 
+                            y1="4" 
+                            x2="80%" 
+                            y2="4" 
+                            stroke={subject.colorCode} 
+                            strokeWidth="2"
+                          />
+                          {/* 円 */}
+                          <circle 
+                            cx="80%" 
+                            cy="4" 
+                            r="4" 
+                            fill={subject.colorCode}
+                          />
+                        </g>
+                      </svg>
                       
                       {/* 右側の装飾線 */}
                       <div 
