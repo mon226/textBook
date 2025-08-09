@@ -286,16 +286,14 @@ export default function PDFViewerPage() {
                           onLoadingComplete={() => {
                             setIsLoading(false);
                             setDoorsVisible(true);
-                            // PDFを3秒かけて表示
-                            setTimeout(() => setPdfOpacity(1), 100);
-                            // 2秒表示してから扉を開く
+                            // PDFを3秒かけて表示（即座に開始）
+                            setPdfOpacity(1);
+                            // 扉も即座に開き始める
+                            setDoorsOpen(true);
+                            // 8秒のスライド後に非表示
                             setTimeout(() => {
-                              setDoorsOpen(true);
-                              // 8秒のスライド後に非表示
-                              setTimeout(() => {
-                                setDoorsVisible(false);
-                              }, 8000);
-                            }, 2000);
+                              setDoorsVisible(false);
+                            }, 8000);
                           }}
                           onLoadStart={() => {
                             setIsLoading(true);
