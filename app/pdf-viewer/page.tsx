@@ -281,6 +281,7 @@ export default function PDFViewerPage() {
                           src={`/img/pam/二子玉川参考書紹介'25${formatPageNumber(pageNum)}.webp`}
                           alt={`ページ ${pageNum}`}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
                           className="object-contain pointer-events-none transition-opacity duration-[3000ms]"
                           style={{ opacity: pdfOpacity }}
                           onLoadingComplete={() => {
