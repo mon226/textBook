@@ -175,8 +175,8 @@ export default function PDFViewerPage() {
   return (
     <>
       <div className="min-h-screen bg-gradient-main relative">
-        {/* PC版の境界線 */}
-        <div className="hidden md:block absolute left-1/2 top-0 h-full w-[960px] -translate-x-1/2 pointer-events-none">
+        {/* PC版の境界線 - z-indexを扉より上に */}
+        <div className="hidden md:block absolute left-1/2 top-0 h-full w-[960px] -translate-x-1/2 pointer-events-none z-50">
           <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
           <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
         </div>
@@ -184,9 +184,9 @@ export default function PDFViewerPage() {
         {/* メインコンテンツ */}
         <div className="h-screen relative">
           <div className="container-wrapper h-full relative">
-            {/* 扉のオーバーレイ */}
+            {/* 扉のオーバーレイ - PC版は960px幅に制限 */}
             <div 
-              className={`absolute inset-0 z-40 pointer-events-none`}
+              className={`absolute inset-0 md:inset-auto md:left-1/2 md:top-0 md:bottom-0 md:w-[960px] md:-translate-x-1/2 z-40 pointer-events-none`}
               style={{ display: doorsVisible ? 'block' : 'none' }}
             >
               {/* 左扉 */}
