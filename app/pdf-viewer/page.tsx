@@ -178,8 +178,8 @@ export default function PDFViewerPage() {
       <div className="min-h-screen md:h-[100dvh] bg-gradient-main relative md:overflow-hidden">
         {/* PC版の境界線 - z-indexを扉より上に */}
         <div className="hidden md:block absolute left-1/2 top-0 h-full w-[960px] -translate-x-1/2 pointer-events-none z-50">
-          <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
-          <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
+          <div className="absolute left-0 top-0 bottom-0 w-[5px] bg-[#b28247]" />
+          <div className="absolute right-0 top-0 bottom-0 w-[5px] bg-[#b28247]" />
         </div>
         
         {/* メインコンテンツ */}
