@@ -288,12 +288,14 @@ export default function PDFViewerPage() {
                             setDoorsVisible(true);
                             // PDFを3秒かけて表示（即座に開始）
                             setPdfOpacity(1);
-                            // 扉も即座に開き始める
-                            setDoorsOpen(true);
+                            // 扉も即座に開き始める（少し遅延を入れて確実に表示）
+                            setTimeout(() => {
+                              setDoorsOpen(true);
+                            }, 50);
                             // 8秒のスライド後に非表示
                             setTimeout(() => {
                               setDoorsVisible(false);
-                            }, 8000);
+                            }, 8050);
                           }}
                           onLoadStart={() => {
                             setIsLoading(true);
