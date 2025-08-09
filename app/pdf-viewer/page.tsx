@@ -8,6 +8,8 @@ export default function PDFViewerPage() {
   const [currentPage, setCurrentPage] = useState(0); // 0ページ（表紙）から開始
   const [inputPage, setInputPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [doorsOpen, setDoorsOpen] = useState(false);
+  const [doorAspectRatio, setDoorAspectRatio] = useState<'3-4' | '9-16'>('3-4');
   const totalPages = 52; // 実際のページ数（画像は1-52）
   const maxDisplayPage = 51; // 表示上の最大ページ（0-51）
 
@@ -142,6 +144,31 @@ export default function PDFViewerPage() {
     }
   }, [nextPage, prevPage]);
 
+  // 表示エリアの縦横比を判定して適切な扉画像を選択
+  useEffect(() => {
+    const checkAspectRatio = () => {
+      const container = document.querySelector('.container-wrapper');
+      if (container) {
+        const width = container.clientWidth;
+        const height = window.innerHeight; // h-screenなので画面の高さ
+        const ratio = width / height;
+        
+        // 3:4 = 0.75, 9:16 = 0.5625
+        // 中間値の0.65を基準に判定
+        if (ratio > 0.65) {
+          setDoorAspectRatio('3-4');
+        } else {
+          setDoorAspectRatio('9-16');
+        }
+      }
+    };
+
+    checkAspectRatio();
+    window.addEventListener('resize', checkAspectRatio);
+    
+    return () => window.removeEventListener('resize', checkAspectRatio);
+  }, []);
+
   const displayPages = getDisplayPages();
 
   return (
@@ -154,8 +181,62 @@ export default function PDFViewerPage() {
         </div>
         
         {/* メインコンテンツ */}
-        <div className="h-screen">
-          <div className="container-wrapper h-full">
+        <div className="h-screen relative">
+          <div className="container-wrapper h-full relative">
+            {/* 扉のオーバーレイ */}
+            <div 
+              className={`absolute inset-0 z-40 pointer-events-none`}
+              style={{ display: isLoading || !doorsOpen ? 'block' : 'none' }}
+            >
+              {/* 左扉 */}
+              <div 
+                className="absolute top-0 bottom-0 left-0 w-1/2 flex items-center justify-end overflow-hidden"
+                style={{
+                  transform: doorsOpen ? 'translateX(-100%)' : 'translateX(0)',
+                  transition: 'transform 5s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <Image
+                  src={`/img/door/${doorAspectRatio}-left.webp`}
+                  alt="左扉"
+                  width={doorAspectRatio === '3-4' ? 15 : 13.5}
+                  height={doorAspectRatio === '3-4' ? 40 : 48}
+                  className="h-full w-auto"
+                  style={{
+                    height: '100%',
+                    width: 'auto',
+                    objectFit: 'cover',
+                    objectPosition: 'right center'
+                  }}
+                  priority
+                />
+              </div>
+              
+              {/* 右扉 */}
+              <div 
+                className="absolute top-0 bottom-0 right-0 w-1/2 flex items-center justify-start overflow-hidden"
+                style={{
+                  transform: doorsOpen ? 'translateX(100%)' : 'translateX(0)',
+                  transition: 'transform 5s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <Image
+                  src={`/img/door/${doorAspectRatio}-right.webp`}
+                  alt="右扉"
+                  width={doorAspectRatio === '3-4' ? 15 : 13.5}
+                  height={doorAspectRatio === '3-4' ? 40 : 48}
+                  className="h-full w-auto"
+                  style={{
+                    height: '100%',
+                    width: 'auto',
+                    objectFit: 'cover',
+                    objectPosition: 'left center'
+                  }}
+                  priority
+                />
+              </div>
+            </div>
+            
             <div 
               className="h-full w-full md:max-w-[960px] md:mx-auto relative"
               style={{
@@ -199,8 +280,15 @@ export default function PDFViewerPage() {
                           alt={`ページ ${pageNum}`}
                           fill
                           className="object-contain pointer-events-none"
-                          onLoadingComplete={() => setIsLoading(false)}
-                          onLoadStart={() => setIsLoading(true)}
+                          onLoadingComplete={() => {
+                            setIsLoading(false);
+                            // 1秒待ってからゆっくり扉を開く
+                            setTimeout(() => setDoorsOpen(true), 1000);
+                          }}
+                          onLoadStart={() => {
+                            setIsLoading(true);
+                            setDoorsOpen(false);
+                          }}
                           priority={currentPage === 0 && pageNum === 1}
                           quality={95}
                           draggable={false}
