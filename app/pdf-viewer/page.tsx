@@ -193,7 +193,7 @@ export default function PDFViewerPage() {
                 className="absolute top-0 bottom-0 left-0 w-1/2 flex items-center justify-end overflow-hidden"
                 style={{
                   transform: doorsOpen ? 'translateX(-100%)' : 'translateX(0)',
-                  transition: 'transform 5s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: 'transform 15s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               >
                 <Image
@@ -217,7 +217,7 @@ export default function PDFViewerPage() {
                 className="absolute top-0 bottom-0 right-0 w-1/2 flex items-center justify-start overflow-hidden"
                 style={{
                   transform: doorsOpen ? 'translateX(100%)' : 'translateX(0)',
-                  transition: 'transform 5s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: 'transform 15s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               >
                 <Image
