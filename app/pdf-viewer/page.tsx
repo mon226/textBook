@@ -186,7 +186,6 @@ export default function PDFViewerPage() {
             {/* 扉のオーバーレイ */}
             <div 
               className={`absolute inset-0 z-40 pointer-events-none`}
-              style={{ display: isLoading || !doorsOpen ? 'block' : 'none' }}
             >
               {/* 左扉 */}
               <div 
