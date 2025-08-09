@@ -9,6 +9,7 @@ export default function PDFViewerPage() {
   const [inputPage, setInputPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [doorsOpen, setDoorsOpen] = useState(false);
+  const [doorsVisible, setDoorsVisible] = useState(false);
   const [doorAspectRatio, setDoorAspectRatio] = useState<'3-4' | '9-16'>('3-4');
   const totalPages = 52; // 実際のページ数（画像は1-52）
   const maxDisplayPage = 51; // 表示上の最大ページ（0-51）
@@ -186,13 +187,14 @@ export default function PDFViewerPage() {
             {/* 扉のオーバーレイ */}
             <div 
               className={`absolute inset-0 z-40 pointer-events-none`}
+              style={{ display: doorsVisible ? 'block' : 'none' }}
             >
               {/* 左扉 */}
               <div 
                 className="absolute top-0 bottom-0 left-0 w-1/2 flex items-center justify-end overflow-hidden"
                 style={{
                   transform: doorsOpen ? 'translateX(-100%)' : 'translateX(0)',
-                  transition: 'transform 15s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: 'transform 8s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               >
                 <Image
@@ -216,7 +218,7 @@ export default function PDFViewerPage() {
                 className="absolute top-0 bottom-0 right-0 w-1/2 flex items-center justify-start overflow-hidden"
                 style={{
                   transform: doorsOpen ? 'translateX(100%)' : 'translateX(0)',
-                  transition: 'transform 15s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: 'transform 8s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               >
                 <Image
@@ -281,12 +283,20 @@ export default function PDFViewerPage() {
                           className="object-contain pointer-events-none"
                           onLoadingComplete={() => {
                             setIsLoading(false);
-                            // 1秒待ってからゆっくり扉を開く
-                            setTimeout(() => setDoorsOpen(true), 1000);
+                            setDoorsVisible(true);
+                            // 2秒表示してから扉を開く
+                            setTimeout(() => {
+                              setDoorsOpen(true);
+                              // 8秒のスライド後に非表示
+                              setTimeout(() => {
+                                setDoorsVisible(false);
+                              }, 8000);
+                            }, 2000);
                           }}
                           onLoadStart={() => {
                             setIsLoading(true);
                             setDoorsOpen(false);
+                            setDoorsVisible(false);
                           }}
                           priority={currentPage === 0 && pageNum === 1}
                           quality={95}
