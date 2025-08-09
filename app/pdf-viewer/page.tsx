@@ -198,7 +198,7 @@ export default function PDFViewerPage() {
                 }}
               >
                 <Image
-                  src={`/img/door/${doorAspectRatio}-left.webp`}
+                  src={`/img/door/${doorAspectRatio}-left.svg`}
                   alt="左扉"
                   width={doorAspectRatio === '3-4' ? 15 : 13.5}
                   height={doorAspectRatio === '3-4' ? 40 : 48}
@@ -222,7 +222,7 @@ export default function PDFViewerPage() {
                 }}
               >
                 <Image
-                  src={`/img/door/${doorAspectRatio}-right.webp`}
+                  src={`/img/door/${doorAspectRatio}-right.svg`}
                   alt="右扉"
                   width={doorAspectRatio === '3-4' ? 15 : 13.5}
                   height={doorAspectRatio === '3-4' ? 40 : 48}
