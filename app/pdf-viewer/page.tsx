@@ -186,7 +186,7 @@ export default function PDFViewerPage() {
           <div className="container-wrapper h-full relative">
             {/* 扉のオーバーレイ - PC版は960px幅に制限 */}
             <div 
-              className={`absolute inset-0 md:inset-auto md:left-1/2 md:top-0 md:bottom-0 md:w-[960px] md:-translate-x-1/2 z-40 pointer-events-none`}
+              className={`absolute inset-0 md:inset-auto md:left-1/2 md:top-0 md:bottom-0 md:w-[960px] md:-translate-x-1/2 z-40 pointer-events-none overflow-hidden`}
               style={{ display: doorsVisible ? 'block' : 'none' }}
             >
               {/* 左扉 */}
