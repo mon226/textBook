@@ -175,7 +175,7 @@ export default function PDFViewerPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-main relative">
+      <div className="min-h-screen md:h-[100dvh] bg-gradient-main relative md:overflow-hidden">
         {/* PC版の境界線 - z-indexを扉より上に */}
         <div className="hidden md:block absolute left-1/2 top-0 h-full w-[960px] -translate-x-1/2 pointer-events-none z-50">
           <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#b28247]" />
@@ -183,7 +183,7 @@ export default function PDFViewerPage() {
         </div>
         
         {/* メインコンテンツ */}
-        <div className="h-screen relative">
+        <div className="h-screen md:h-[100dvh] relative">
           <div className="container-wrapper h-full relative">
             {/* 扉のオーバーレイ - PC版は960px幅に制限 */}
             <div 
@@ -240,13 +240,13 @@ export default function PDFViewerPage() {
             </div>
             
             <div 
-              className="h-full w-full md:max-w-[960px] md:mx-auto relative"
+              className="h-full w-full md:max-w-[960px] md:mx-auto relative flex flex-col"
               style={{
                 background: 'linear-gradient(135deg, #fbdfe1 0%, #cc8699 100%)'
               }}
             >
               {/* PDF表示エリア */}
-              <div id="pdf-content" className="h-full relative overflow-hidden bg-white/10">
+              <div id="pdf-content" className="flex-1 relative overflow-hidden bg-white/10">
                 {/* 左側のクリックエリア */}
                 <div 
                   className="absolute left-0 top-0 bottom-0 w-[20%] md:w-[15%] z-10 cursor-pointer hover:bg-black/5 active:bg-black/10 transition-colors"
@@ -317,7 +317,7 @@ export default function PDFViewerPage() {
               </div>
               
               {/* 固定フッター */}
-              <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t-2 border-[#b28247]/30 z-30">
+              <div className="bg-white/90 backdrop-blur-sm border-t-2 border-[#b28247]/30 z-30">
                 <div className="px-[3vw] py-[2vw] md:px-6 md:py-3">
                   {/* ページナビゲーション */}
                   <div className="flex items-center justify-between">
