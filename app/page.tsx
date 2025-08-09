@@ -89,7 +89,9 @@ export default function Home() {
       description: '歴史・地理・公民を体系的に理解',
       colorCode: '#eeb537',
       subItems: [
-        { name: '社会のお悩み解決特集', href: '/social/qa' }
+        { name: '日本史', href: '/social/history-jp' },
+        { name: '世界史', href: '/social/history-world' },
+        { name: '地理', href: '/social/geography' },
       ]
     },
   ];
