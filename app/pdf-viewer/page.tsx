@@ -11,6 +11,7 @@ export default function PDFViewerPage() {
   const [doorsOpen, setDoorsOpen] = useState(false);
   const [doorsVisible, setDoorsVisible] = useState(false);
   const [doorAspectRatio, setDoorAspectRatio] = useState<'3-4' | '9-16'>('3-4');
+  const [pdfOpacity, setPdfOpacity] = useState(0);
   const totalPages = 52; // 実際のページ数（画像は1-52）
   const maxDisplayPage = 51; // 表示上の最大ページ（0-51）
 
@@ -280,10 +281,13 @@ export default function PDFViewerPage() {
                           src={`/img/pam/二子玉川参考書紹介'25${formatPageNumber(pageNum)}.webp`}
                           alt={`ページ ${pageNum}`}
                           fill
-                          className="object-contain pointer-events-none"
+                          className="object-contain pointer-events-none transition-opacity duration-[3000ms]"
+                          style={{ opacity: pdfOpacity }}
                           onLoadingComplete={() => {
                             setIsLoading(false);
                             setDoorsVisible(true);
+                            // PDFを3秒かけて表示
+                            setTimeout(() => setPdfOpacity(1), 100);
                             // 2秒表示してから扉を開く
                             setTimeout(() => {
                               setDoorsOpen(true);
@@ -297,6 +301,7 @@ export default function PDFViewerPage() {
                             setIsLoading(true);
                             setDoorsOpen(false);
                             setDoorsVisible(false);
+                            setPdfOpacity(0);
                           }}
                           priority={currentPage === 0 && pageNum === 1}
                           quality={95}
