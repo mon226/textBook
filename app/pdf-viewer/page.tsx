@@ -203,11 +203,11 @@ export default function PDFViewerPage() {
                   alt="左扉"
                   width={doorAspectRatio === '3-4' ? 15 : 13.5}
                   height={doorAspectRatio === '3-4' ? 40 : 48}
-                  className="w-full h-auto"
+                  className="min-w-full min-h-full"
                   style={{
                     width: '100%',
-                    height: 'auto',
-                    objectFit: 'contain',
+                    height: '100%',
+                    objectFit: 'cover',
                     objectPosition: 'right center'
                   }}
                   priority
@@ -227,11 +227,11 @@ export default function PDFViewerPage() {
                   alt="右扉"
                   width={doorAspectRatio === '3-4' ? 15 : 13.5}
                   height={doorAspectRatio === '3-4' ? 40 : 48}
-                  className="w-full h-auto"
+                  className="min-w-full min-h-full"
                   style={{
                     width: '100%',
-                    height: 'auto',
-                    objectFit: 'contain',
+                    height: '100%',
+                    objectFit: 'cover',
                     objectPosition: 'left center'
                   }}
                   priority
