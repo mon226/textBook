@@ -12,7 +12,6 @@ export default function PDFViewerPage() {
   const [doorsVisible, setDoorsVisible] = useState(false);
   const [doorAspectRatio, setDoorAspectRatio] = useState<'3-4' | '9-16'>('3-4');
   const [pdfOpacity, setPdfOpacity] = useState(0);
-  const totalPages = 52; // 実際のページ数（画像は1-52）
   const maxDisplayPage = 51; // 表示上の最大ページ（0-51）
 
   // ページ番号をフォーマット（webpファイル用）
@@ -320,56 +319,120 @@ export default function PDFViewerPage() {
               <div className="bg-white/90 backdrop-blur-sm border-t-2 border-[#b28247]/30 z-30">
                 <div className="px-[3vw] py-[2vw] md:px-6 md:py-3">
                   {/* ページナビゲーション */}
-                  <div className="flex items-center justify-between">
-                    <button 
-                      onClick={prevPage}
-                      disabled={currentPage === 0}
-                      className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
-                      style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
-                    >
-                      ← 前へ
-                    </button>
-                    
+                  <div className="flex items-center justify-center">
                     <div className="flex items-center gap-2">
-                      <input 
-                        type="number" 
-                        min="0" 
-                        max={maxDisplayPage}
-                        value={inputPage}
-                        onChange={(e) => {
-                          const value = parseInt(e.target.value);
-                          setInputPage(value);
-                        }}
-                        onBlur={(e) => {
-                          const value = parseInt(e.target.value);
-                          if (!isNaN(value)) {
-                            handlePageInput(value);
+                      {/* 戻るボタン群 */}
+                      <button 
+                        onClick={() => {
+                          let newPage = currentPage - 10;
+                          // 負の値にならないようにする
+                          newPage = Math.max(0, newPage);
+                          // 見開きページの調整（0以外は奇数ページにする）
+                          if (newPage > 0 && newPage < maxDisplayPage && newPage % 2 === 0) {
+                            newPage = newPage - 1;
                           }
+                          setCurrentPage(newPage);
+                          setInputPage(newPage);
                         }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            const value = parseInt(e.currentTarget.value);
-                            if (!isNaN(value)) {
-                              handlePageInput(value);
-                            }
+                        disabled={currentPage === 0}
+                        className="px-3 py-2 bg-[#731a3d] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300 flex items-center justify-center min-w-[56px]"
+                        aria-label="10ページ戻る"
+                      >
+                        <svg width="28" height="16" viewBox="0 0 28 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M11.928 2L4 8L11.928 14L11.928 2Z" fill="currentColor"/>
+                          <path d="M21.928 2L14 8L21.928 14L21.928 2Z" fill="currentColor"/>
+                        </svg>
+                      </button>
+                      <button 
+                        onClick={prevPage}
+                        disabled={currentPage === 0}
+                        className="px-3 py-2 bg-[#731a3d] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300 flex items-center justify-center min-w-[56px]"
+                        aria-label="前のページへ"
+                      >
+                        <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M11.928 2L4 8L11.928 14L11.928 2Z" fill="currentColor"/>
+                        </svg>
+                      </button>
+                      
+                      {/* ページ番号表示/入力 */}
+                      <div className="flex items-center gap-2 mx-2">
+                        {/* PC版：入力フィールド */}
+                        <div className="hidden md:flex items-center gap-2">
+                          <input 
+                            type="number" 
+                            min="0" 
+                            max={maxDisplayPage}
+                            value={inputPage}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value);
+                              setInputPage(value);
+                            }}
+                            onBlur={(e) => {
+                              const value = parseInt(e.target.value);
+                              if (!isNaN(value)) {
+                                handlePageInput(value);
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                const value = parseInt(e.currentTarget.value);
+                                if (!isNaN(value)) {
+                                  handlePageInput(value);
+                                }
+                              }
+                            }}
+                            className="w-16 text-center border border-[#b28247]/30 rounded px-2 py-1 bg-white/50 text-[#731a3d]"
+                            style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
+                          />
+                          <span className="text-[#731a3d]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
+                            / {maxDisplayPage}
+                          </span>
+                        </div>
+                        
+                        {/* スマホ/タブレット版：表示のみ */}
+                        <div className="md:hidden flex items-center gap-1">
+                          <span className="text-[#731a3d] font-medium" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>
+                            {currentPage}
+                          </span>
+                          <span className="text-[#731a3d]" style={{ fontSize: 'clamp(1rem, 3vw, 1.25rem)' }}>
+                            / {maxDisplayPage}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* 進むボタン群 */}
+                      <button 
+                        onClick={nextPage}
+                        disabled={currentPage === maxDisplayPage}
+                        className="px-3 py-2 bg-[#731a3d] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300 flex items-center justify-center min-w-[56px]"
+                        aria-label="次のページへ"
+                      >
+                        <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2.072 2L10 8L2.072 14L2.072 2Z" fill="currentColor"/>
+                        </svg>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          let newPage = currentPage + 10;
+                          // 最大値を超えないようにする
+                          newPage = Math.min(maxDisplayPage, newPage);
+                          // 見開きページの調整（maxDisplayPage以外で偶数なら奇数にする）
+                          if (newPage > 0 && newPage < maxDisplayPage && newPage % 2 === 0) {
+                            newPage = newPage - 1;
                           }
+                          setCurrentPage(newPage);
+                          setInputPage(newPage);
                         }}
-                        className="w-16 text-center border border-[#b28247]/30 rounded px-2 py-1 bg-white/50 text-[#731a3d]"
-                        style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
-                      />
-                      <span className="text-[#731a3d]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>
-                        / {maxDisplayPage}
-                      </span>
+                        disabled={currentPage === maxDisplayPage}
+                        className="px-3 py-2 bg-[#731a3d] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300 flex items-center justify-center min-w-[56px]"
+                        aria-label="10ページ進む"
+                      >
+                        <svg width="28" height="16" viewBox="0 0 28 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M6.072 2L14 8L6.072 14L6.072 2Z" fill="currentColor"/>
+                          <path d="M16.072 2L24 8L16.072 14L16.072 2Z" fill="currentColor"/>
+                        </svg>
+                      </button>
                     </div>
-                    
-                    <button 
-                      onClick={nextPage}
-                      disabled={currentPage === maxDisplayPage}
-                      className="px-4 py-2 bg-[#731a3d] text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b28247] transition-colors duration-300"
-                      style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}
-                    >
-                      次へ →
-                    </button>
                   </div>
                 </div>
               </div>
