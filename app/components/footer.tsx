@@ -49,7 +49,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-[5vw] pt-[5vw] border-t border-gray-light text-center">
-          <p className="text-secondary px-[3vw]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>&copy; 2024 二子玉川参考書紹介 &apos;25</p>
+          <p className="text-secondary px-[3vw]" style={{ fontSize: 'clamp(0.875rem, 2vw, 1rem)' }}>2024 二子玉川参考書紹介 &apos;25</p>
         </div>
       </div>
     </footer>
